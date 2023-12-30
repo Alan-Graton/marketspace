@@ -9,6 +9,7 @@ Aplicativo de venda e compra no estilo OLX. Com ele, é possível cadastrar novo
 ## TODO
 
 - [ ] Desenvolvimento das Interfaces
+- [ ] Criação de rotas iniciais
 - [ ] Implementar funcionalidades mockadas
 - [ ] Integrar com [Backend](https://github.com/rocketseat-education/ignite-rn-2022-challenge-marketspace-api)
 
