@@ -99,6 +99,7 @@ export default function Login() {
             title="Entrar"
             action="primary"
             onPress={handleSubmit(onSubmit)}
+            mt="$7"
           />
         </Center>
       </VStack>
