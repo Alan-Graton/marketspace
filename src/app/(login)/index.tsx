@@ -2,7 +2,14 @@ import React from "react";
 import { router } from "expo-router";
 import { ImageURISource } from "react-native";
 
-import { Center, Heading, Image, Text, VStack } from "@gluestack-ui/themed";
+import {
+  Center,
+  Heading,
+  Image,
+  Text,
+  VStack,
+  Box,
+} from "@gluestack-ui/themed";
 
 import { AppSafeAreaView } from "@/components/AppSafeAreaView";
 import { AppInput } from "@/components/AppInput";
@@ -33,8 +40,20 @@ export default function Login() {
   }
 
   return (
-    <AppSafeAreaView bg="#EDECEE">
-      <VStack flex={1} p="$12" justifyContent="space-between">
+    <AppSafeAreaView
+      bg="#F7F7F8"
+      style={{
+        flexGrow: 1,
+      }}
+    >
+      <VStack
+        p="$12"
+        flex={1}
+        bg="$gray200"
+        borderBottomLeftRadius="$3xl"
+        borderBottomRightRadius="$3xl"
+        justifyContent="space-around"
+      >
         <Center>
           <Image
             source={logo}
@@ -82,7 +101,8 @@ export default function Login() {
             onPress={handleSubmit(onSubmit)}
           />
         </Center>
-
+      </VStack>
+      <Box p="$12" justifyContent="center" bg="$gray100">
         <Center>
           <Text>Ainda não tem acesso?</Text>
           <AppButton
@@ -93,7 +113,7 @@ export default function Login() {
             }}
           />
         </Center>
-      </VStack>
+      </Box>
     </AppSafeAreaView>
   );
 }
