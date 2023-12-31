@@ -45,7 +45,7 @@ export const Button = createStyle({
         },
 
         ":active": {
-          bg: "$blue400",
+          bg: "$blue300",
           borderColor: "$primary700",
         },
 
