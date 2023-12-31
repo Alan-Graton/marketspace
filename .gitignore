@@ -16,9 +16,6 @@ web-build/
 *.key
 *.mobileprovision
 
-# Gluestack-UI
-config/theme/*
-
 # Metro
 .metro-health-check*
 
