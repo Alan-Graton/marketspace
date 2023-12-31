@@ -1,4 +1,4 @@
-import { Button, ButtonText, Text } from "@gluestack-ui/themed";
+import { Button, ButtonText } from "@gluestack-ui/themed";
 
 type IButtonProps = React.ComponentProps<typeof Button>;
 
@@ -10,7 +10,9 @@ interface Props extends IButtonProps {
 export function AppButton({ title, action = "primary", ...rest }: Props) {
   return (
     <Button w="$full" h="$12" action={action} {...rest}>
-      <ButtonText action={action}>{title}</ButtonText>
+      <ButtonText action={action}  bold>
+        {title}
+      </ButtonText>
     </Button>
   );
 }

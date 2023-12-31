@@ -33,7 +33,7 @@ export default function Login() {
   }
 
   return (
-    <AppSafeAreaView bg="#D9D8DA">
+    <AppSafeAreaView bg="#EDECEE">
       <VStack flex={1} p="$12" justifyContent="space-between">
         <Center>
           <Image
