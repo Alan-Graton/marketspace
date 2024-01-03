@@ -27,6 +27,9 @@ import {
 
 import logo from "@/assets/logo.png";
 
+/**
+ * TODO: Re-think this layout. Still not 100% loyal to prototype
+ */
 export default function Login() {
   const {
     control,
@@ -105,7 +108,7 @@ export default function Login() {
             />
           </Center>
         </VStack>
-        <Box p="$12" justifyContent="center" bg="$gray100">
+        <Box p="$12" flex={1} justifyContent="center" bg="$gray100">
           <Center>
             <Text>Ainda não tem acesso?</Text>
             <AppButton
