@@ -6,7 +6,7 @@ import {
 interface Props extends SafeAreaProviderProps {
   children: React.ReactNode;
   /** Background Color */
-  bg: string;
+  bg?: string;
 }
 
 export function AppSafeAreaView({ children, bg, ...rest }: Props) {
