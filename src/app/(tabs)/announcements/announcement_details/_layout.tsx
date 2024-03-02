@@ -22,7 +22,6 @@ export default function AnnouncementDetailsLayout() {
           headerShown: selectedAnnouncement ? true : false,
           headerStyle: {
             backgroundColor: COLORS.GRAY_600,
-            height: 100,
           },
           headerLeft: () => <AnnouncementDetailsHeaderLeft />,
           headerRight: () => <AnnouncementDetailsHeaderRight />,

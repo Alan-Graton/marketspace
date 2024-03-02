@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Slot, Tabs } from "expo-router";
+import { Slot, Tabs, router } from "expo-router";
 
 import { useAnnouncementContext } from "@/hooks/useAnnouncementContext";
 
@@ -14,8 +14,6 @@ export default function AnnouncementsLayout() {
   const { COLORS, FONT_FAMILY } = useTheme();
 
   const { selectedAnnouncement } = useAnnouncementContext();
-
-  console.log("selectedAnnouncement: ", selectedAnnouncement);
 
   return (
     <>
@@ -32,8 +30,14 @@ export default function AnnouncementsLayout() {
             height: 100,
             backgroundColor: COLORS.GRAY_600,
           },
+          // TODO: Title and buttons must be dynamic for diff ocasions
           headerRight: () => (
-            <AppIconButton style={{ padding: 10 }}>
+            <AppIconButton
+              style={{ padding: 10 }}
+              onPress={() => {
+                router.push("/announcement_registration/");
+              }}
+            >
               <Plus />
             </AppIconButton>
           ),
