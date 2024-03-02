@@ -1,0 +1,52 @@
+import React from "react";
+
+import { FlatList, ScrollView } from "react-native";
+
+import { AnnouncementsCounter } from "./components/AnnouncementsCounter";
+import { ProductsFilter } from "./components/ProductsFilter";
+import { AppProductCard } from "@/components/AppProductCard";
+
+import * as S from "./styles";
+
+export default function Home() {
+  const [products, setProducts] = React.useState<
+    Array<{ key: number; item: number; status: "NOVO" | "USADO" }>
+  >(
+    Array.from({ length: 10 }).map((item, index) => {
+      return {
+        key: index,
+        item: index,
+        status: index % 2 === 0 ? "NOVO" : "USADO",
+      };
+    })
+  );
+  return (
+    <S.Container>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <S.Content>
+          <S.Header>
+            <AnnouncementsCounter />
+          </S.Header>
+          <S.Body>
+            <ProductsFilter />
+            <FlatList
+              data={products}
+              keyExtractor={(item) => item.key}
+              renderItem={({ item }) => (
+                <S.ProductCardContainer>
+                  <AppProductCard
+                    showAvatar
+                    status={item.status}
+                    key={item.key}
+                  />
+                </S.ProductCardContainer>
+              )}
+              numColumns={2}
+              scrollEnabled={false}
+            />
+          </S.Body>
+        </S.Content>
+      </ScrollView>
+    </S.Container>
+  );
+}
