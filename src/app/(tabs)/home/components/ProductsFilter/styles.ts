@@ -27,10 +27,5 @@ export const IconsContainer = styled.View`
   padding: 10px;
 `;
 
-export const SearchIconButton = styled(AppIconButton)`
-  border-right-width: 1px;
-  border-right-color: ${({ theme }) => theme.COLORS.GRAY_200};
-
-  padding-right: 10px;
-`;
+export const SearchIconButton = styled(AppIconButton)``;
 export const FilterIconButton = styled(AppIconButton)``;
