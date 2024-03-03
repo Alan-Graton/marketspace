@@ -9,6 +9,10 @@ interface IAnnouncementContext {
   setSelectedAnnouncement: React.Dispatch<
     React.SetStateAction<IAnnouncement | null>
   >;
+  announcementAction: AnnouncementAction;
+  setAnnouncementAction: React.Dispatch<
+    React.SetStateAction<AnnouncementAction>
+  >;
 }
 
 export const AnnouncementContext = React.createContext<IAnnouncementContext>(
@@ -18,6 +22,8 @@ export const AnnouncementContext = React.createContext<IAnnouncementContext>(
 interface IContextProps {
   children: React.ReactNode;
 }
+
+type AnnouncementAction = "Details" | "MyDetails" | "Preview";
 
 export function AnnouncementProvider({ children }: IContextProps) {
   const [announcements, setAnnouncements] = useState<IAnnouncement[] | []>(
@@ -29,8 +35,12 @@ export function AnnouncementProvider({ children }: IContextProps) {
       };
     })
   );
+
   const [selectedAnnouncement, setSelectedAnnouncement] =
     useState<IAnnouncement | null>(null);
+
+  const [announcementAction, setAnnouncementAction] =
+    useState<AnnouncementAction>("Details");
 
   return (
     <AnnouncementContext.Provider
@@ -39,6 +49,8 @@ export function AnnouncementProvider({ children }: IContextProps) {
         setAnnouncements,
         selectedAnnouncement,
         setSelectedAnnouncement,
+        announcementAction,
+        setAnnouncementAction,
       }}
     >
       {children}
