@@ -22,9 +22,6 @@ export function AppProductCard({
         <S.Header style={!showAvatar && { justifyContent: "flex-end" }}>
           {showAvatar && <S.Avatar source={avatar} />}
           <AppStatusBadge status={status} />
-          {/* <S.StatusBadge status={status}>
-            <S.StatusText>{status}</S.StatusText>
-          </S.StatusBadge> */}
         </S.Header>
       </S.ProductImg>
       <S.Footer>
