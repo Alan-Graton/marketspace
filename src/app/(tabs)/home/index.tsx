@@ -4,6 +4,9 @@ import { FlatList, ScrollView } from "react-native";
 
 import { AnnouncementsCounter } from "./components/AnnouncementsCounter";
 import { ProductsFilter } from "./components/ProductsFilter";
+import { BottomSheetHeader } from "./components/BottomSheetComponents/BottomSheetHeader";
+import { BottomSheetBody } from "./components/BottomSheetComponents/BottomSheetBody";
+import { BottomSheetFooter } from "./components/BottomSheetComponents/BottomSheetFooter";
 
 import { AppProductCard } from "@/components/AppProductCard";
 import { AppBottomSheet } from "@/components/AppBottomSheet";
@@ -62,6 +65,9 @@ export default function Home() {
       <AppBottomSheet
         isVisible={bottomSheetVisible}
         setIsVisible={setBottomSheetVisible}
+        header={<BottomSheetHeader />}
+        body={<BottomSheetBody />}
+        footer={<BottomSheetFooter />}
       />
     </>
   );
