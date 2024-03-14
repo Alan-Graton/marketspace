@@ -1,3 +1,5 @@
+import "react-native-gesture-handler";
+
 import { Slot } from "expo-router";
 
 import { AnnouncementProvider } from "@/contexts/AnnouncementContext";

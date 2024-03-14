@@ -23,7 +23,17 @@ interface IContextProps {
   children: React.ReactNode;
 }
 
-type AnnouncementAction = "Details" | "MyDetails" | "Preview";
+type AnnouncementAction =
+  | "AnnouncementDetails"
+  | "MyAnnouncementDetails"
+  | "MyAnnouncementPreview";
+
+// TODO: Posso tentar com ENUM também
+// enum AnnouncementAction {
+//   AnnouncementDetails,
+//   MyAnnouncementDetails,
+//   MyAnnouncementPreview
+// }
 
 export function AnnouncementProvider({ children }: IContextProps) {
   const [announcements, setAnnouncements] = useState<IAnnouncement[] | []>(
@@ -40,7 +50,7 @@ export function AnnouncementProvider({ children }: IContextProps) {
     useState<IAnnouncement | null>(null);
 
   const [announcementAction, setAnnouncementAction] =
-    useState<AnnouncementAction>("Details");
+    useState<AnnouncementAction>("AnnouncementDetails");
 
   return (
     <AnnouncementContext.Provider
