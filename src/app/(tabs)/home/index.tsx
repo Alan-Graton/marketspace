@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { FlatList, ScrollView } from "react-native";
+import { FlatList, ScrollView, View } from "react-native";
 
 import { AnnouncementsCounter } from "./components/AnnouncementsCounter";
 import { ProductsFilter } from "./components/ProductsFilter";
@@ -27,8 +27,6 @@ export default function Home() {
       };
     })
   );
-
-  console.log("Bottom Sheet should be visible? ", bottomSheetVisible);
 
   return (
     <>
@@ -65,7 +63,7 @@ export default function Home() {
       <AppBottomSheet
         isVisible={bottomSheetVisible}
         setIsVisible={setBottomSheetVisible}
-        header={<BottomSheetHeader />}
+        header={<BottomSheetHeader setIsVisible={setBottomSheetVisible} />}
         body={<BottomSheetBody />}
         footer={<BottomSheetFooter />}
       />

@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 
 import { BottomSheet, BottomSheetProps } from "@rneui/themed";
 
+import { useTheme } from "styled-components/native";
 import * as S from "./styles";
 
 interface IProps extends BottomSheetProps {
@@ -22,13 +23,16 @@ export function AppBottomSheet({
   footer,
   ...rest
 }: IProps) {
+  const { COLORS } = useTheme();
+
   return (
     <BottomSheet
       isVisible={isVisible}
       onBackdropPress={() => setIsVisible(false)}
+      backdropStyle={{ backgroundColor: COLORS.BACKDROP }}
       {...rest}
     >
-      <S.Content>
+      <S.Content showsVerticalScrollIndicator={false}>
         <S.Header>{header}</S.Header>
         <S.Body>{body}</S.Body>
         <S.Footer>{footer}</S.Footer>
