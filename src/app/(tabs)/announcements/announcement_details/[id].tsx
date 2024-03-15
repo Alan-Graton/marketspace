@@ -57,7 +57,12 @@ export default function AnnouncementDetails() {
               </Text>
             </View>
             <View style={{ marginTop: 25, gap: 8 }}>
-              <AppStatusBadge status={selectedAnnouncement?.status} />
+              <AppStatusBadge
+                status={selectedAnnouncement?.status}
+                style={{
+                  maxWidth: 70,
+                }}
+              />
               <View style={{ gap: 8 }}>
                 <View
                   style={{
