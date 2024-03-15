@@ -38,8 +38,8 @@ export const Header = styled.View`
 `;
 
 export const Avatar = styled.Image`
-  width: 18%;
-  height: 120%;
+  width: 23px;
+  height: 24px;
 `;
 
 export const StatusBadge = styled.View<BadgeStyleProps>`

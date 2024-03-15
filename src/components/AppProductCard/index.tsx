@@ -1,10 +1,11 @@
 import { TouchableOpacityProps } from "react-native";
 
+import { AppStatusBadge } from "../AppStatusBadge";
+
 import avatar from "@/assets/defaultAvatar.png";
 import productPng from "@/assets/product1.png";
 
 import * as S from "./styles";
-import { AppStatusBadge } from "../AppStatusBadge";
 
 interface IProps extends TouchableOpacityProps {
   showAvatar?: boolean;
