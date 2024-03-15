@@ -2,7 +2,7 @@ import React from "react";
 
 import { useGlobalSearchParams } from "expo-router";
 
-import { Image, Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 
 import { useAnnouncementContext } from "@/hooks/useAnnouncementContext";
 
@@ -25,7 +25,7 @@ import * as S from "./styles";
 
 export default function AnnouncementDetails() {
   const { id } = useGlobalSearchParams<{ id: string }>();
-  const { COLORS, FONT_FAMILY } = useTheme();
+  const { COLORS } = useTheme();
 
   const { selectedAnnouncement, setSelectedAnnouncement } =
     useAnnouncementContext();
@@ -44,19 +44,11 @@ export default function AnnouncementDetails() {
             <S.AnnouncementImg source={announcement} resizeMode="stretch" />
           </S.Header>
           <S.Body>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <Image source={avatar} style={{ width: 24, height: 24 }} />
-              <Text style={{ fontSize: 14, color: COLORS.GRAY_100 }}>
-                Alan Graton
-              </Text>
-            </View>
-            <View style={{ marginTop: 25, gap: 8 }}>
+            <S.AuthorSection>
+              <S.AuthorAvatar source={avatar} />
+              <S.AuthorName>Alan Graton</S.AuthorName>
+            </S.AuthorSection>
+            <S.ProductDetailsSection>
               <AppStatusBadge
                 status={selectedAnnouncement?.status}
                 style={{
@@ -64,85 +56,43 @@ export default function AnnouncementDetails() {
                 }}
               />
               <View style={{ gap: 8 }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{ fontSize: 20, fontFamily: FONT_FAMILY.HEADING }}
-                  >
-                    Tênis vermelho
-                  </Text>
+                <S.ProductPriceNameWrapper>
+                  <S.ProductName>Tênis vermelho</S.ProductName>
                   <View
                     style={{ flexDirection: "row", alignItems: "baseline" }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontFamily: FONT_FAMILY.HEADING,
-                        color: COLORS.BLUE_LIGHT,
-                      }}
-                    >
-                      R$
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontFamily: FONT_FAMILY.HEADING,
-                        color: COLORS.BLUE_LIGHT,
-                      }}
-                    >
-                      69,00
-                    </Text>
+                    <S.DollarSign>R$</S.DollarSign>
+                    <S.ProductPrice>69,00</S.ProductPrice>
                   </View>
-                </View>
+                </S.ProductPriceNameWrapper>
                 <Text style={{ color: COLORS.GRAY_200 }}>
                   O Tênis Redley Originals Summer em vermelho é uma escolha
                   perfeita para quem busca versatilidade e estilo no dia a dia.
                 </Text>
               </View>
-            </View>
-            <View style={{ marginTop: 24, marginBottom: 24 }}>
+            </S.ProductDetailsSection>
+            <S.ProductHasTradeSection>
               <View style={{ flexDirection: "row", gap: 8 }}>
-                <Text
-                  style={{
-                    fontFamily: FONT_FAMILY.HEADING,
-                    fontSize: 14,
-                    color: COLORS.GRAY_200,
-                  }}
-                >
-                  Aceita troca?
-                </Text>
-                <Text style={{ fontSize: 14, color: COLORS.GRAY_200 }}>
-                  Não
-                </Text>
+                <S.ProductHasTradeTitle>Aceita troca?</S.ProductHasTradeTitle>
+                <S.HasTrade>Não</S.HasTrade>
               </View>
-            </View>
-            <Text
-              style={{
-                fontFamily: FONT_FAMILY.HEADING,
-                color: COLORS.GRAY_200,
-                marginBottom: 8,
-              }}
-            >
+            </S.ProductHasTradeSection>
+            <S.PaymentMethodSectionTitle>
               Meio de pagamento:
-            </Text>
-            {/* NOTE: Esses detalhes */}
-            <View style={{ flexDirection: "row", gap: 8, marginBottom: 4 }}>
+            </S.PaymentMethodSectionTitle>
+            {/* NOTE: Esses detalhes vão ser dinâmicos, já que o produto pode ou não ter uma dessas opções */}
+            <S.PaymentMethodOption>
               <Barcode size={18} color={COLORS.GRAY_100} />
-              <Text style={{ color: COLORS.GRAY_200 }}>Boleto</Text>
-            </View>
-            <View style={{ flexDirection: "row", gap: 8, marginBottom: 4 }}>
+              <S.PaymentMethodTitle>Boleto</S.PaymentMethodTitle>
+            </S.PaymentMethodOption>
+            <S.PaymentMethodOption>
               <QrCode size={18} color={COLORS.GRAY_100} />
-              <Text style={{ color: COLORS.GRAY_200 }}>Pix</Text>
-            </View>
-            <View style={{ flexDirection: "row", gap: 8 }}>
+              <S.PaymentMethodTitle>Pix</S.PaymentMethodTitle>
+            </S.PaymentMethodOption>
+            <S.PaymentMethodOption>
               <Bank size={18} color={COLORS.GRAY_100} />
-              <Text style={{ color: COLORS.GRAY_200 }}>Depósito Bancário</Text>
-            </View>
+              <S.PaymentMethodTitle>Depósito Bancário</S.PaymentMethodTitle>
+            </S.PaymentMethodOption>
           </S.Body>
           <S.Footer>
             {/*
