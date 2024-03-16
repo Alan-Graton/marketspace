@@ -1,41 +1,41 @@
 import React from "react";
 
-import { ScrollView, Text, View } from "react-native";
+import { View } from "react-native";
 
 import { AppButton } from "@/components/AppButton";
 import { AppInput } from "@/components/AppInput";
 
-import { CheckBox } from "@rneui/base";
 import { Switch } from "@rneui/themed";
-import CurrencyInput from "react-native-currency-input";
+
+import { Plus } from "phosphor-react-native";
 
 import * as S from "./styles";
 import { useTheme } from "styled-components/native";
 
 export default function AnnouncementRegistration() {
-  const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();
+  const { COLORS, FONT_SIZE } = useTheme();
 
   const [value, setValue] = React.useState<number | null>(0);
 
   return (
     <>
-      <ScrollView
-        className="content"
-        contentContainerStyle={{ padding: 16 }}
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1, backgroundColor: COLORS.GRAY_600 }}
-      >
-        <View className="product-image-section">
-          <Text>Imagens</Text>
-          <Text>
-            Escolha até 3 imagens para mostrar o quanto o seu produto é
-            incrível!
-          </Text>
-        </View>
-        <View className="product-details-section">
-          <View>
-            <View className="about-section">
-              <Text>Sobre o produto</Text>
+      <S.Container>
+        <S.ProductImageSection>
+          <View style={{ gap: 4 }}>
+            <S.SectionTitle>Imagens</S.SectionTitle>
+            <S.SectionSubtitle>
+              Escolha até 3 imagens para mostrar o quanto o seu produto é
+              incrível!
+            </S.SectionSubtitle>
+          </View>
+          <S.ProductImageSelector>
+            <Plus size={24} color={COLORS.GRAY_400} />
+          </S.ProductImageSelector>
+        </S.ProductImageSection>
+        <S.ProductDetailsSection>
+          <View style={{ gap: 32 }}>
+            <S.AboutSection>
+              <S.SectionTitle>Sobre o produto</S.SectionTitle>
               <AppInput placeholder="Título do anúncio" />
               <AppInput
                 placeholder="Descrição do produto"
@@ -43,46 +43,21 @@ export default function AnnouncementRegistration() {
                 numberOfLines={10}
                 style={{ height: 160, textAlignVertical: "top" }}
               />
-              <CheckBox
-                title="Produto novo"
-                checked={false}
-                size={18}
-                // iconType="material-community"
-                checkedIcon="dot-circle-o"
-                uncheckedIcon="circle-o"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-              <CheckBox
-                title="Produto usado"
-                checked={false}
-                size={18}
-                // iconType="material-community"
-                checkedIcon="dot-circle-o"
-                uncheckedIcon="circle-o"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-            </View>
-            <View className="sale-section">
-              <Text>Venda</Text>
-              <CurrencyInput
+              <View style={{ flexDirection: "row", gap: 20 }}>
+                <S.ProductStatusRadioButton
+                  title="Produto novo"
+                  checked={false}
+                />
+                <S.ProductStatusRadioButton
+                  title="Produto usado"
+                  checked={false}
+                />
+              </View>
+            </S.AboutSection>
+            <S.SaleSection>
+              <S.SectionTitle>Venda</S.SectionTitle>
+              <S.ProductPrice
                 value={value}
-                minValue={0}
                 onChangeValue={setValue}
                 renderTextInput={(textInputProps) => (
                   <AppInput
@@ -90,12 +65,10 @@ export default function AnnouncementRegistration() {
                     {...textInputProps}
                   />
                 )}
-                prefix="R$"
-                delimiter="."
-                separator=","
-                precision={2}
               />
-              <Text>Aceita troca?</Text>
+              <S.SectionTitle style={{ fontSize: FONT_SIZE.sm }}>
+                Aceita troca?
+              </S.SectionTitle>
 
               <Switch
                 style={{
@@ -103,109 +76,34 @@ export default function AnnouncementRegistration() {
                 }}
                 color={COLORS.BLUE_LIGHT}
               />
-              <Text>Meios de pagamento aceitos</Text>
-              <CheckBox
-                title="Boleto"
-                checked={false}
-                size={18}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-              <CheckBox
-                title="Pix"
-                checked={false}
-                size={18}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-              <CheckBox
-                title="Dinheiro"
-                checked={false}
-                size={18}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-              <CheckBox
-                title="Cartão de Crédito"
-                checked={false}
-                size={18}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-              <CheckBox
-                title="Depósito Bancário"
-                checked={false}
-                size={18}
-                iconType="material-community"
-                checkedIcon="checkbox-marked"
-                uncheckedIcon="checkbox-blank-outline"
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: 0,
-                }}
-                titleProps={{
-                  style: {},
-                }}
-              />
-            </View>
+              <View style={{ gap: 12 }}>
+                <View>
+                  <S.SectionTitle style={{ fontSize: FONT_SIZE.sm }}>
+                    Meios de pagamento aceitos
+                  </S.SectionTitle>
+                </View>
+                <View style={{ gap: 8 }}>
+                  <S.PaymentMethodsCheckBox title="Boleto" checked={false} />
+                  <S.PaymentMethodsCheckBox title="Pix" checked={false} />
+                  <S.PaymentMethodsCheckBox title="Dinheiro" checked={false} />
+                  <S.PaymentMethodsCheckBox
+                    title="Cartão de Crédito"
+                    checked={false}
+                  />
+                  <S.PaymentMethodsCheckBox
+                    title="Depósito Bancário"
+                    checked={false}
+                  />
+                </View>
+              </View>
+            </S.SaleSection>
           </View>
-        </View>
-      </ScrollView>
-      <View
-        className="footer"
-        style={{
-          padding: 16,
-          backgroundColor: COLORS.GRAY_700,
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: 12,
-        }}
-      >
-        <AppButton title="Cancelar" style={{ flex: 1 }} />
-        <AppButton title="Avançar" style={{ flex: 1 }} />
-      </View>
+        </S.ProductDetailsSection>
+      </S.Container>
+      <S.Footer>
+        <AppButton title="Cancelar" style={{ flex: 1 }} type="secondary" />
+        <AppButton title="Avançar" style={{ flex: 1 }} type="ternary" />
+      </S.Footer>
     </>
   );
 }
