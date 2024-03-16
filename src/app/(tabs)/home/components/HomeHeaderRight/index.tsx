@@ -1,3 +1,5 @@
+import { router } from "expo-router";
+
 import { AppButton } from "@/components/AppButton";
 
 import { Plus } from "phosphor-react-native";
@@ -15,6 +17,7 @@ export function HomeHeaderRight() {
         icon={<Plus size={16} color={COLORS.GRAY_600} />}
         type="ternary"
         style={{ flex: 1 }}
+        onPress={() => router.push("/announcement_registration/")}
       />
     </S.Container>
   );
