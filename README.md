@@ -7,7 +7,7 @@ Esse projeto é um dos desafios da trilha de React Native do Ignite, nosso bootc
 
 ## TODO
 
-- [ ] Desenvolvimento inicial das interfaces (layout, estilização)
-- [ ] Desenvolvimento inicial das funcionalidades (navegação, utilidades)
+- [X] Desenvolvimento inicial das interfaces (layout, estilização)
+- [X] Desenvolvimento inicial das funcionalidades (navegação, utilidades)
 - [ ] Integração com Backend
 - [ ] Finalização da dinâmica das telas com ações do usuário pós-integração com Backend
