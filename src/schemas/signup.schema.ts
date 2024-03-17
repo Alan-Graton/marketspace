@@ -1,9 +1,13 @@
 import * as yup from "yup";
 
 const signUpSchema = yup.object({
+  avatar: yup.string().required("Avatar é obrigatório"),
+  // avatar: yup.object().shape({
+  //   uri: yup.string().required("Avatar é obrigatório"),
+  // }),
   name: yup.string().required("Nome obrigatório"),
   email: yup.string().email("E-mail inválido").required("E-mail obrigatório"),
-  telephone: yup.string().required("Telefone obrigatório"),
+  tel: yup.string().required("Telefone obrigatório"),
   password: yup
     .string()
     .required("Senha obrigatória")
@@ -15,17 +19,19 @@ const signUpSchema = yup.object({
 });
 
 interface ISignUpSchema {
+  avatar: string;
   name: string;
   email: string;
-  telephone: string;
+  tel: string;
   password: string;
   password_confirmation: string;
 }
 
 const DEFAULT_VALUES = {
+  avatar: "",
   name: "",
   email: "",
-  telephone: "",
+  tel: "",
   password: "",
   password_confirmation: "",
 };

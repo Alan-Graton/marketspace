@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import { router } from "expo-router";
+
 import { ScrollView, View } from "react-native";
 
-import { router } from "expo-router";
+import { useAuthContext } from "@/hooks/useAuthContext.hook";
 
 import { AppButton } from "@/components/AppButton";
 import { AppInput } from "@/components/AppInput";
 import { AppFormTexts } from "@/components/AppFormTexts";
+import { AppLoader } from "@/components/AppLoader";
+
+import { AppError } from "@/utils/AppError";
+
+import Toast from "react-native-toast-message";
 
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -20,6 +27,7 @@ import logoPng from "@/assets/logo.png";
 import { Eye, EyeClosed } from "phosphor-react-native";
 
 import * as S from "./styles";
+import { useTheme } from "styled-components/native";
 
 export default function Login() {
   const {
@@ -31,14 +39,40 @@ export default function Login() {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const { COLORS } = useTheme();
+
+  const { signIn, user } = useAuthContext();
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   function handleSignUpNavigation() {
     router.push("/(signup)/");
   }
 
-  function onSubmit(data: ILoginSchema) {
-    router.push("/home/");
+  async function onSubmit(data: ILoginSchema) {
+    try {
+      setLoading(true);
+
+      await signIn(data.email, data.password);
+
+      router.push("/home/");
+    } catch (error: any) {
+      console.error("sign in FAILED: ", error);
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível entrar. Tente novamente mais tarde.";
+
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: title,
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -88,7 +122,10 @@ export default function Login() {
               </S.PasswordIconButton>
             </View>
             <AppFormTexts errorMessage={errors.password?.message} />
-            <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
+            <AppLoader loading={loading} color={COLORS.BLUE} />
+            {!loading && (
+              <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
+            )}
           </S.Body>
           <S.Footer>
             <S.SubTitle>Ainda não tem acesso?</S.SubTitle>

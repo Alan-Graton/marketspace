@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import { router } from "expo-router";
+
 import { View, ScrollView } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import { Avatar } from "react-native-paper";
+
+import Toast from "react-native-toast-message";
+
+import { useAuthContext } from "@/hooks/useAuthContext.hook";
 
 import { AppButton } from "@/components/AppButton";
 import { AppInput } from "@/components/AppInput";
@@ -28,15 +35,19 @@ export default function SignUp() {
   const {
     control,
     handleSubmit,
+    setValue, // Usado para atribuir valores aos campos do Schema manualmente
     formState: { errors },
   } = useForm<ISignUpSchema>({
     resolver: yupResolver(signUpSchema),
     defaultValues: DEFAULT_VALUES,
   });
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const { signUp, user } = useAuthContext();
+
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
-    React.useState(false);
+    useState(false);
 
   function handlePasswordIcon(
     state: boolean,
@@ -49,8 +60,64 @@ export default function SignUp() {
     );
   }
 
-  function onSubmit(data: ISignUpSchema) {
-    console.log("Form Data: ", data);
+  async function handleCaptureImage() {
+    const response = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (response.canceled) {
+      setValue("avatar", "");
+
+      return;
+    }
+
+    const selectedUri = response.assets[0];
+
+    if (selectedUri) {
+      if (selectedUri.fileSize && selectedUri.fileSize / 1024 / 1024 > 5) {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Essa imagem é muito grande. Escolha uma de até 5MB",
+        });
+        return;
+      }
+
+      setValue("avatar", selectedUri.uri);
+
+      const fileExtension = selectedUri.uri.split(".").pop();
+
+      const avatarFile = {
+        name: `${user.name}.${fileExtension}`.toLocaleLowerCase(),
+        uri: selectedUri.uri,
+        type: `${selectedUri.type}/${fileExtension}`,
+      };
+
+      console.log("AVATAR FILE: ", avatarFile);
+
+      Toast.show({
+        type: "success",
+        text1: "Oba!",
+        text2: "Foto de perfil selecionada com sucesso!",
+      });
+    }
+  }
+
+  async function onSubmit({ avatar, email, name, tel }: ISignUpSchema) {
+    try {
+      setLoading(true);
+
+      // await signUp({});
+
+      router.push("/(tabs)/home");
+    } catch (error) {
+      console.error("sign up FAILED: ", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -104,7 +171,7 @@ export default function SignUp() {
             />
             <Controller
               control={control}
-              name="telephone"
+              name="tel"
               render={({ field: { onBlur, onChange, value } }) => (
                 <>
                   <AppInput
@@ -113,7 +180,7 @@ export default function SignUp() {
                     onChangeText={onChange}
                     value={value}
                   />
-                  <AppFormTexts errorMessage={errors.telephone?.message} />
+                  <AppFormTexts errorMessage={errors.tel?.message} />
                 </>
               )}
             />
