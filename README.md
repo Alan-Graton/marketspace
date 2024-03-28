@@ -5,6 +5,19 @@
 Marketspace é uma aplicação mobile para compra e venda de itens novos e usados.
 Esse projeto é um dos desafios da trilha de React Native do Ignite, nosso bootcamp completo de especialização em React, React Native e Node.js.
 
+## REFACTOR
+
+Será necessário refatorar o desenvolvimento da tela de detalhes de um anúncio.
+
+A tela será dividida em outras 3 telas: 
+
+- Detalhes do Anúncio (de outra pessoa)
+- Detalhes do meu Anúncio
+- Pré-visualização do meu Anúncio
+
+Para refatorar posso colocar todo o conteúdo em comum entre as telas dentro de um componente global, enquanto os Headers e Footers
+vão ser alterados conforme necessário dentro das próprias telas.
+
 ## TODO
 
 - [X] Desenvolvimento inicial das interfaces (layout, estilização)
