@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 
 import { AppIconButton } from "@/components/AppIconButton";
 
-import { handleGoBack } from "@/utils/HandleGoBack";
+import { handleGoBack } from "@/utils/handleGoBack.util";
 
 import { ArrowLeft } from "phosphor-react-native";
 

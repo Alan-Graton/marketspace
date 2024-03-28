@@ -22,14 +22,32 @@ import {
 } from "@/schemas/signup.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { handleGoBack } from "@/utils/HandleGoBack";
+import { handleGoBack } from "@/utils/handleGoBack.util";
 
-import avatarPng from "@/assets/defaultAvatar.png";
 import logoPng from "@/assets/logo.png";
+import defaultAvatar from "@/assets/defaultAvatar.png";
 
 import { PencilSimpleLine, Eye, EyeClosed } from "phosphor-react-native";
 
 import * as S from "./styles";
+
+export interface IAvatar {
+  selected: boolean;
+  photo: {
+    uri: string;
+    name: string;
+    type: string;
+  };
+}
+
+const AVATAR_DEFAULT_VALUE = {
+  selected: false,
+  photo: {
+    uri: "",
+    name: "",
+    type: "",
+  },
+} as IAvatar;
 
 export default function SignUp() {
   const {
@@ -42,12 +60,14 @@ export default function SignUp() {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { signUp, user } = useAuthContext();
+  const { signUp, signIn } = useAuthContext();
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
+  const [selectedAvatar, setSelectedAvatar] =
+    useState<IAvatar>(AVATAR_DEFAULT_VALUE);
 
   function handlePasswordIcon(
     state: boolean,
@@ -59,6 +79,10 @@ export default function SignUp() {
       </S.PasswordIconButton>
     );
   }
+
+  React.useLayoutEffect(() => {
+    setSelectedAvatar({} as IAvatar);
+  }, []);
 
   async function handleCaptureImage() {
     const response = await ImagePicker.launchImageLibraryAsync({
@@ -91,12 +115,12 @@ export default function SignUp() {
       const fileExtension = selectedUri.uri.split(".").pop();
 
       const avatarFile = {
-        name: `${user.name}.${fileExtension}`.toLocaleLowerCase(),
+        name: "",
         uri: selectedUri.uri,
         type: `${selectedUri.type}/${fileExtension}`,
       };
 
-      console.log("AVATAR FILE: ", avatarFile);
+      setSelectedAvatar({ selected: true, photo: { ...avatarFile } });
 
       Toast.show({
         type: "success",
@@ -106,13 +130,41 @@ export default function SignUp() {
     }
   }
 
-  async function onSubmit({ avatar, email, name, tel }: ISignUpSchema) {
+  const handleSignUpAvatar = (selectedAvatar: IAvatar) => {
+    if (selectedAvatar.selected) {
+      return {
+        uri: selectedAvatar.photo.uri,
+      };
+    }
+
+    return defaultAvatar;
+  };
+
+  async function onSubmit({ email, name, password, tel }: ISignUpSchema) {
     try {
       setLoading(true);
 
-      // await signUp({});
+      const formData = new FormData();
 
-      router.push("/(tabs)/home");
+      const fileType = selectedAvatar.photo.type.split("/")[1];
+
+      const avatarForm = {
+        ...selectedAvatar.photo,
+        name: `${name}.${fileType}`.toLowerCase(),
+      };
+
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("tel", tel);
+      formData.append("password", password);
+      formData.append("avatar", avatarForm);
+
+      // For tests only
+      // await signUp(formData);
+
+      // await signIn(email, name);
+
+      // router.push("/(tabs)/home");
     } catch (error) {
       console.error("sign up FAILED: ", error);
     } finally {
@@ -133,12 +185,24 @@ export default function SignUp() {
             </S.SubTitle>
           </S.Header>
           <S.Body>
-            <S.AvatarForm>
-              <Avatar.Image source={avatarPng} />
-              <S.AvatarIconButton>
-                <PencilSimpleLine size={16} color="white" />
-              </S.AvatarIconButton>
-            </S.AvatarForm>
+            <Controller
+              control={control}
+              name="avatar"
+              render={() => (
+                <View style={{ alignItems: "center", gap: 8 }}>
+                  <S.AvatarForm>
+                    <Avatar.Image
+                      source={handleSignUpAvatar(selectedAvatar)}
+                      size={88}
+                    />
+                    <S.AvatarIconButton onPress={handleCaptureImage}>
+                      <PencilSimpleLine size={16} color="white" />
+                    </S.AvatarIconButton>
+                  </S.AvatarForm>
+                  <AppFormTexts errorMessage={errors.avatar?.message} />
+                </View>
+              )}
+            />
             <Controller
               control={control}
               name="name"
@@ -179,6 +243,7 @@ export default function SignUp() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
+                    maxLength={11}
                   />
                   <AppFormTexts errorMessage={errors.tel?.message} />
                 </>
@@ -227,6 +292,7 @@ export default function SignUp() {
               title="Criar"
               type="ternary"
               onPress={handleSubmit(onSubmit)}
+              loading={loading}
             />
           </S.Body>
           <S.Footer>

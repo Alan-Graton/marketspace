@@ -57,7 +57,7 @@ export default function Announcements() {
           <S.Body>
             <FlatList
               data={announcements}
-              keyExtractor={(item) => item.key}
+              keyExtractor={(item) => String(item.key)}
               renderItem={({ item }) => (
                 <S.ProductCardContainer>
                   <AppProductCard

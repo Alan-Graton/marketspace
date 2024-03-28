@@ -10,7 +10,7 @@ import { AppInput } from "@/components/AppInput";
 import { AppFormTexts } from "@/components/AppFormTexts";
 import { AppLoader } from "@/components/AppLoader";
 
-import { AppError } from "@/utils/AppError";
+import { AppError } from "@/utils/AppError.util";
 
 import Toast from "react-native-toast-message";
 

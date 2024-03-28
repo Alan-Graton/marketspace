@@ -6,6 +6,7 @@ interface IAppButtonStyleProps {
   variant?: string;
   type?: ComponentStyleType;
   icon?: React.JSX.Element;
+  loading?: boolean;
 }
 
 export const Container = styled.TouchableOpacity<IAppButtonStyleProps>`

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { FlatList, ScrollView, View } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 
 import { AnnouncementsCounter } from "./components/AnnouncementsCounter";
 import { ProductsFilter } from "./components/ProductsFilter";
@@ -43,7 +43,7 @@ export default function Home() {
               />
               <FlatList
                 data={products}
-                keyExtractor={(item) => item.key}
+                keyExtractor={(item) => String(item.key)}
                 renderItem={({ item }) => (
                   <S.ProductCardContainer>
                     <AppProductCard

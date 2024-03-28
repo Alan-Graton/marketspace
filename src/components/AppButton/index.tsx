@@ -2,6 +2,8 @@ import { TouchableOpacityProps } from "react-native";
 
 import { ComponentStyleType } from "@/@types";
 
+import { AppLoader } from "../AppLoader";
+
 import * as S from "./styles";
 
 interface IProps extends TouchableOpacityProps {
@@ -9,6 +11,7 @@ interface IProps extends TouchableOpacityProps {
   variant?: ""; // creates variants
   type?: ComponentStyleType;
   icon?: React.JSX.Element;
+  loading?: boolean;
 }
 
 export function AppButton({
@@ -16,14 +19,22 @@ export function AppButton({
   variant,
   type = "primary",
   icon,
+  loading = false,
   ...rest
 }: IProps) {
   return (
-    <S.Container variant={variant} type={type} icon={icon} {...rest}>
+    <S.Container
+      variant={variant}
+      type={type}
+      icon={icon}
+      loading={loading}
+      {...rest}
+    >
       {icon && icon}
-      <S.Title variant={variant} type={type}>
+      <S.Title variant={variant} type={type} loading={loading}>
         {title}
       </S.Title>
+      {loading && <AppLoader loading={loading} />}
     </S.Container>
   );
 }

@@ -2,12 +2,12 @@ import * as yup from "yup";
 
 const signUpSchema = yup.object({
   avatar: yup.string().required("Avatar é obrigatório"),
-  // avatar: yup.object().shape({
-  //   uri: yup.string().required("Avatar é obrigatório"),
-  // }),
   name: yup.string().required("Nome obrigatório"),
   email: yup.string().email("E-mail inválido").required("E-mail obrigatório"),
-  tel: yup.string().required("Telefone obrigatório"),
+  tel: yup
+    .string()
+    .required("Telefone obrigatório")
+    .max(9, "Telefone inválido"),
   password: yup
     .string()
     .required("Senha obrigatória")

@@ -19,7 +19,13 @@ export const PasswordIconButton = styled(AppIconButton)`
 export const AvatarIconButton = styled(AppIconButton)`
   position: absolute;
   bottom: 0;
-  right: 37%;
+  right: -2%;
+
+  width: 40px;
+  height: 40px;
+
+  align-items: center;
+  justify-content: center;
 
   background-color: ${({ theme }) => theme.COLORS.BLUE_LIGHT};
 

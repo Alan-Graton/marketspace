@@ -4,7 +4,7 @@ import { UserDTO } from "@/dtos/User.dto";
 import { api } from "@/service/api";
 
 export interface IAuthContext {
-  signUp: (user: UserDTO) => Promise<void>;
+  signUp: (user: FormData) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   user: UserDTO;
@@ -20,8 +20,11 @@ interface IProps {
 export function AuthProvider({ children }: IProps) {
   const [user, setUser] = React.useState<UserDTO>({} as UserDTO);
 
-  async function signUp(user: UserDTO) {
+  async function signUp(user: FormData) {
     try {
+      await api.post("user", user, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     } catch (error) {
       console.error("signUp FAILED: ", error);
       throw error;
