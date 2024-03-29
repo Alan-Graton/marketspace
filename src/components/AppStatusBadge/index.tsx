@@ -17,10 +17,15 @@ interface IProps extends ViewProps {
 export function AppStatusBadge({ status, hasIcon = false, ...rest }: IProps) {
   const { COLORS } = useTheme();
 
+  const HANDLE_BADGE_TITLE = {
+    0: "USADO",
+    1: "NOVO",
+  };
+
   return (
     <S.Container status={status} hasIcon={hasIcon} {...rest}>
       <S.Title status={status} hasIcon={hasIcon}>
-        {status}
+        {HANDLE_BADGE_TITLE[status]}
       </S.Title>
       {/* FIXME: Só exibir o icon no caso do badge ter sido selecionado */}
       {hasIcon && <XCircle size={16} color={COLORS.GRAY_600} weight="fill" />}
