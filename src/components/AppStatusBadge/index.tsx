@@ -1,4 +1,4 @@
-import { AnnouncementStatus } from "@/@types";
+import { ProductStatus } from "@/@types";
 
 import { ViewProps } from "react-native";
 
@@ -8,7 +8,7 @@ import { useTheme } from "styled-components/native";
 import * as S from "./styles";
 
 interface IProps extends ViewProps {
-  status: AnnouncementStatus;
+  status: ProductStatus;
   hasIcon?: Boolean;
 }
 

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
+import { useFocusEffect } from "expo-router";
 
 import { FlatList, ScrollView } from "react-native";
+
+import { useProductsContext } from "@/hooks/useProductsContext.hook";
+
+import { AppProductCard } from "@/components/AppProductCard";
+import { AppBottomSheet } from "@/components/AppBottomSheet";
+import { AppEmptyList } from "@/components/AppEmptyList";
 
 import { AnnouncementsCounter } from "./components/AnnouncementsCounter";
 import { ProductsFilter } from "./components/ProductsFilter";
@@ -8,24 +15,21 @@ import { BottomSheetHeader } from "./components/BottomSheetComponents/BottomShee
 import { BottomSheetBody } from "./components/BottomSheetComponents/BottomSheetBody";
 import { BottomSheetFooter } from "./components/BottomSheetComponents/BottomSheetFooter";
 
-import { AppProductCard } from "@/components/AppProductCard";
-import { AppBottomSheet } from "@/components/AppBottomSheet";
-
 import * as S from "./styles";
 
 export default function Home() {
+  const { products, setProducts, getProducts } = useProductsContext();
+
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
-  const [products, setProducts] = useState<
-    Array<{ key: number; item: number; status: "NOVO" | "USADO" }>
-  >(
-    Array.from({ length: 10 }).map((item, index) => {
-      return {
-        key: index,
-        item: index,
-        status: index % 2 === 0 ? "NOVO" : "USADO",
-      };
-    })
+  useFocusEffect(
+    React.useCallback(() => {
+      async function fetchData() {
+        await getProducts();
+      }
+
+      fetchData();
+    }, [])
   );
 
   return (
@@ -43,16 +47,22 @@ export default function Home() {
               />
               <FlatList
                 data={products}
-                keyExtractor={(item) => String(item.key)}
+                keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
                   <S.ProductCardContainer>
                     <AppProductCard
                       showAvatar
-                      status={item.status}
-                      key={item.key}
+                      status={item.is_new}
+                      key={item.id}
                     />
                   </S.ProductCardContainer>
                 )}
+                ListEmptyComponent={
+                  <AppEmptyList
+                    title="Nenhum produto encontrado"
+                    subtitle="Use os filtros acima para encontrá-los"
+                  />
+                }
                 numColumns={2}
                 scrollEnabled={false}
               />

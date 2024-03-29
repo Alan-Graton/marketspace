@@ -1,11 +1,14 @@
 import React from "react";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { FlatList, ScrollView, Text } from "react-native";
 
-import { useAnnouncementContext } from "@/hooks/useAnnouncementContext";
+import { useProductsContext } from "@/hooks/useProductsContext.hook";
 
 import { AppDropDown } from "@/components/AppDropDown";
 import { AppProductCard } from "@/components/AppProductCard";
+import { AppEmptyList } from "@/components/AppEmptyList";
+
+import { ProductsDTO } from "@/dtos/Products.dto";
 
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
@@ -13,18 +16,30 @@ import * as S from "./styles";
 export default function Announcements() {
   const { COLORS, FONT_FAMILY } = useTheme();
 
-  const { announcements, selectedAnnouncement, setSelectedAnnouncement } =
-    useAnnouncementContext();
+  const { userProducts, getUserProducts, selectedProduct, setSelectedProduct } =
+    useProductsContext();
 
-  const [selectedFilter, setSelectedFilter] = React.useState<{
-    label: string;
-    value: string;
-  }>({ label: "Todos", value: "todos" });
+  const [selectedFilter, setSelectedFilter] = React.useState<IProductsFilter>(
+    PRODUCTS_FILTER[0]
+  );
 
-  function handleOpenAnnouncementDetails(item: any) {
-    setSelectedAnnouncement(item);
-    router.push("/(tabs)/announcements/announcement_details/1");
+  function handleOpenAnnouncementDetails(item: ProductsDTO) {
+    console.log("Selected Item: ", item);
+
+    setSelectedProduct(item);
+
+    router.push(`/(tabs)/announcements/announcement_details/${item.id}`);
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      async function fetchData() {
+        await getUserProducts();
+      }
+
+      fetchData();
+    }, [])
+  );
 
   return (
     <S.Container>
@@ -39,34 +54,34 @@ export default function Announcements() {
               borderRadius: 6,
               width: 150,
             }}
-            data={[
-              { label: "Todos", value: "todos" },
-              { label: "Ativos", value: "ativos" },
-              { label: "Inativos", value: "inativos" },
-            ]}
+            data={PRODUCTS_FILTER}
             value={selectedFilter}
             labelField="label"
             valueField="value"
             placeholder="Filtros"
-            onFocus={() => {}}
-            onBlur={() => {}}
-            onChange={() => {}}
+            onChange={setSelectedFilter}
           />
         </S.Header>
         <ScrollView showsVerticalScrollIndicator={false}>
           <S.Body>
             <FlatList
-              data={announcements}
-              keyExtractor={(item) => String(item.key)}
+              data={userProducts}
+              keyExtractor={(item) => String(item.id)}
               renderItem={({ item }) => (
                 <S.ProductCardContainer>
                   <AppProductCard
-                    status={item.status}
-                    key={item.key}
+                    status={item.is_new}
+                    key={item.id}
                     onPress={() => handleOpenAnnouncementDetails(item)}
                   />
                 </S.ProductCardContainer>
               )}
+              ListEmptyComponent={
+                <AppEmptyList
+                  title="Nenhum produto encontrado"
+                  subtitle="Use o filtro acima para encontrá-los"
+                />
+              }
               numColumns={2}
               scrollEnabled={false}
             />
@@ -76,3 +91,14 @@ export default function Announcements() {
     </S.Container>
   );
 }
+
+type IProductsFilter = {
+  label: "Todos" | "Ativos" | "Inativos";
+  value: "todos" | "ativos" | "inativos";
+};
+
+const PRODUCTS_FILTER = [
+  { label: "Todos", value: "todos" },
+  { label: "Ativos", value: "ativos" },
+  { label: "Inativos", value: "inativos" },
+] as IProductsFilter[];

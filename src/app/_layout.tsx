@@ -4,8 +4,9 @@ import Toast from "react-native-toast-message";
 
 import { Slot } from "expo-router";
 
-import { AnnouncementProvider } from "@/contexts/Announcement.context";
 import { AuthProvider } from "@/contexts/Auth.context";
+import { ProductsProvider } from "@/contexts/Products.context";
+import { AnnouncementProvider } from "@/contexts/Announcement.context";
 
 import { StatusBar } from "expo-status-bar";
 
@@ -21,14 +22,20 @@ import { THEME } from "@/theme";
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ Karla_400Regular, Karla_700Bold });
 
-  function handleAppContent() {
-    return <>{}</>;
+  function AppContent() {
+    if (fontsLoaded) {
+      return <Slot />;
+    }
+
+    return null;
   }
 
   return (
     <ThemeProvider theme={THEME}>
       <AuthProvider>
-        <AnnouncementProvider>{fontsLoaded && <Slot />}</AnnouncementProvider>
+        <ProductsProvider>
+          <AnnouncementProvider>{AppContent()}</AnnouncementProvider>
+        </ProductsProvider>
       </AuthProvider>
       <StatusBar animated translucent />
       <Toast />

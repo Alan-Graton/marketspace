@@ -5,11 +5,13 @@ import { AppStatusBadge } from "../AppStatusBadge";
 import avatar from "@/assets/defaultAvatar.png";
 import productPng from "@/assets/product1.png";
 
+import { ProductStatus } from "@/@types";
+
 import * as S from "./styles";
 
 interface IProps extends TouchableOpacityProps {
   showAvatar?: boolean;
-  status: "NOVO" | "USADO";
+  status: ProductStatus;
 }
 
 export function AppProductCard({
