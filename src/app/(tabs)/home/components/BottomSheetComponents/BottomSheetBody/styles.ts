@@ -8,7 +8,7 @@ export const SectionTitle = styled.Text`
   ${({ theme }) => css`
     color: ${theme.COLORS.GRAY_200};
     font-family: ${theme.FONT_FAMILY.HEADING};
-    font-size: ${theme.FONT_SIZE.sm};
+    font-size: ${theme.FONT_SIZE.sm}px;
   `}
 `;
 

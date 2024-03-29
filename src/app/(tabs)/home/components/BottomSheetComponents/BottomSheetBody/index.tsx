@@ -18,10 +18,10 @@ export function BottomSheetBody() {
         <S.SectionTitle>Condição</S.SectionTitle>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <AppIconButton>
-            <S.ProductStatusBadge status="NOVO" hasIcon />
+            <S.ProductStatusBadge status={1} hasIcon />
           </AppIconButton>
           <AppIconButton>
-            <S.ProductStatusBadge status="USADO" hasIcon />
+            <S.ProductStatusBadge status={0} hasIcon />
           </AppIconButton>
         </View>
       </S.ProductConditionSection>
