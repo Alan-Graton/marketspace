@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, useGlobalSearchParams } from "expo-router";
 
 import { AppIconButton } from "@/components/AppIconButton";
 
@@ -9,11 +9,19 @@ import { ArrowLeft } from "phosphor-react-native";
 import { useTheme } from "styled-components/native";
 
 export default function AnnouncementRegistrationLayout() {
+  const { action } = useGlobalSearchParams<{ action: "new" | "edit" }>();
+
+  const HANDLE_ROUTE_TITLE = {
+    new: "Criar anúncio",
+    edit: "Edit anúncio",
+  };
+
   const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();
+
   return (
     <Stack
       screenOptions={{
-        title: "Criar anúncio",
+        title: HANDLE_ROUTE_TITLE[action],
         headerTitleAlign: "center",
         headerShadowVisible: false,
         headerTitleStyle: {

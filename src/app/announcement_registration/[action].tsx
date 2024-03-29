@@ -28,9 +28,18 @@ export default function AnnouncementRegistration() {
               incrível!
             </S.SectionSubtitle>
           </View>
-          <S.ProductImageSelector>
-            <Plus size={24} color={COLORS.GRAY_400} />
-          </S.ProductImageSelector>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            {/* FIXME: This should be wayy more dynamic, like an Array or something... */}
+            <S.ProductImageSelector>
+              <Plus size={24} color={COLORS.GRAY_400} />
+            </S.ProductImageSelector>
+            {/* <S.ProductImageSelector>
+              <Plus size={24} color={COLORS.GRAY_400} />
+            </S.ProductImageSelector>
+            <S.ProductImageSelector>
+              <Plus size={24} color={COLORS.GRAY_400} />
+            </S.ProductImageSelector> */}
+          </View>
         </S.ProductImageSection>
         <S.ProductDetailsSection>
           <View style={{ gap: 32 }}>

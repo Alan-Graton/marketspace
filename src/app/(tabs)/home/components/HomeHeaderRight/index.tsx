@@ -17,7 +17,7 @@ export function HomeHeaderRight() {
         icon={<Plus size={16} color={COLORS.GRAY_600} />}
         type="ternary"
         style={{ flex: 1 }}
-        onPress={() => router.push("/announcement_registration/")}
+        onPress={() => router.push("/announcement_registration/new")}
       />
     </S.Container>
   );
