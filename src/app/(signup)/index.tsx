@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
 
+import { api } from "@/service/api";
+
 import { View, ScrollView } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
@@ -60,7 +62,7 @@ export default function SignUp() {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { signUp, signIn } = useAuthContext();
+  const { signIn } = useAuthContext();
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -159,12 +161,13 @@ export default function SignUp() {
       formData.append("password", password);
       formData.append("avatar", avatarForm);
 
-      // For tests only
-      // await signUp(formData);
+      await api.post("users", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      // await signIn(email, name);
+      await signIn(email, name);
 
-      // router.push("/(tabs)/home");
+      router.push("/(tabs)/home");
     } catch (error) {
       console.error("sign up FAILED: ", error);
     } finally {
@@ -243,7 +246,7 @@ export default function SignUp() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
-                    maxLength={11}
+                    maxLength={9}
                   />
                   <AppFormTexts errorMessage={errors.tel?.message} />
                 </>

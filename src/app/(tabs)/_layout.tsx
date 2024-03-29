@@ -1,8 +1,9 @@
-import { router, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 
 import { TouchableOpacity } from "react-native";
 
 import { useAnnouncementContext } from "@/hooks/useAnnouncementContext";
+import { useAuthContext } from "@/hooks/useAuthContext.hook";
 
 import { House, Tag, SignOut } from "phosphor-react-native";
 
@@ -10,9 +11,14 @@ import { THEME } from "@/theme";
 
 export default function TabsLayout() {
   const { selectedAnnouncement } = useAnnouncementContext();
+  const { signOut } = useAuthContext();
 
-  function handleSignOut() {
-    router.push("/(login)");
+  async function handleSignOut() {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("handleSignOut FAILED: ", error);
+    }
   }
 
   return (
@@ -65,7 +71,7 @@ export default function TabsLayout() {
         name="signout"
         options={{
           tabBarIcon: ({ size }) => (
-            <TouchableOpacity onPress={() => handleSignOut()}>
+            <TouchableOpacity onPress={handleSignOut}>
               <SignOut size={size} color={THEME.COLORS.RED_LIGHT} />
             </TouchableOpacity>
           ),

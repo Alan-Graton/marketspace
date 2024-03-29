@@ -2,13 +2,13 @@ import { ImageSourcePropType } from "react-native";
 
 import { api } from "@/service/api";
 
-import { IAvatar } from "@/app/(signup)";
+import { UserDTO } from "@/dtos/User.dto";
 
 import defaultAvatar from "@/assets/defaultAvatar.png";
 
-export function handleUserAvatar(avatar: IAvatar): ImageSourcePropType {
-  if (avatar.selected) {
-    return { uri: `${api.defaults.baseURL}/avatar/${avatar.photo.uri}` };
+export function handleUserAvatar(user: UserDTO): ImageSourcePropType {
+  if (user.avatar) {
+    return { uri: `${api.defaults.baseURL}/images/${user.avatar}` };
   }
 
   return defaultAvatar;

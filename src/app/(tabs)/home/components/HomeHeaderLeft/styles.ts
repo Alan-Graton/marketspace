@@ -13,6 +13,8 @@ export const Container = styled(SafeAreaView)`
 export const Avatar = styled.Image`
   width: 35%;
   height: 100%;
+
+  border-radius: 50px;
 `;
 
 export const GreetingsContainer = styled.View`

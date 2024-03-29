@@ -122,10 +122,11 @@ export default function Login() {
               </S.PasswordIconButton>
             </View>
             <AppFormTexts errorMessage={errors.password?.message} />
-            <AppLoader loading={loading} color={COLORS.BLUE} />
-            {!loading && (
-              <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
-            )}
+            <AppButton
+              title="Acessar"
+              onPress={handleSubmit(onSubmit)}
+              loading={loading}
+            />
           </S.Body>
           <S.Footer>
             <S.SubTitle>Ainda não tem acesso?</S.SubTitle>

@@ -23,11 +23,14 @@ export const Container = styled.TouchableOpacity<IAppButtonStyleProps>`
   flex-direction: row;
 
   align-items: center;
-  justify-content: ${({ icon }) => {
+  justify-content: center;
+
+  /* Realmente precisa dessa validação? Não lembro o porque eu deixei desse jeito */
+  /* justify-content: ${({ icon }) => {
     if (icon) return "center";
 
     return "center";
-  }};
+  }}; */
 
   gap: ${({ icon }) => {
     if (icon) return "10px";
@@ -41,11 +44,15 @@ export const Container = styled.TouchableOpacity<IAppButtonStyleProps>`
 export const Title = styled.Text<IAppButtonStyleProps>`
   font-weight: bold;
 
+  ${({ loading }) => {
+    if (loading) return `margin-right: 5px`;
+  }};
+
   ${({ theme, variant, type }) => css`
     color: ${type === "primary" || type === "ternary"
       ? theme.COLORS.GRAY_700
       : theme.COLORS.GRAY_200};
 
     font-family: ${theme.FONT_FAMILY.BODY};
-  `}
+  `};
 `;
