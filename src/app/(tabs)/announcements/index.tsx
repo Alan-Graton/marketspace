@@ -28,7 +28,7 @@ export default function Announcements() {
 
     setSelectedProduct(item);
 
-    router.push(`/(tabs)/announcements/announcement_details/${item.id}`);
+    router.push(`/announcement_details/${item.id}`);
   }
 
   useFocusEffect(
