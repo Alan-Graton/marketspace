@@ -114,6 +114,10 @@ export const Footer = styled.View`
 
   background-color: ${({ theme }) => theme.COLORS.GRAY_700};
 
-  padding: 16px;
+  padding-right: 24px;
+  padding-left: 24px;
+  padding-top: 20px;
+  padding-bottom: 28px;
+
   gap: 12px;
 `;
