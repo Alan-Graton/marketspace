@@ -23,6 +23,9 @@ import {
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
 
+/**
+ * @deprecated Use segregated Stack screens in /app folder root
+ */
 export default function AnnouncementDetails() {
   const { id } = useGlobalSearchParams<{ id: string }>();
   const { COLORS } = useTheme();
