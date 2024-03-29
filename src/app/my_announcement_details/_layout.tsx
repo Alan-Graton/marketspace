@@ -1,12 +1,13 @@
+import React from "react";
+
 import { Stack } from "expo-router";
-import { useAnnouncementContext } from "@/hooks/useAnnouncementContext";
 
 import { AnnouncementDetailsHeaderLeft } from "./components/HeaderLeft";
 import { AnnouncementDetailsHeaderRight } from "./components/HeaderRight";
 
 import { useTheme } from "styled-components/native";
 
-export default function AnnouncementDetailsLayout() {
+export default function MyAnnouncementDetailsLayout() {
   const { COLORS } = useTheme();
 
   return (

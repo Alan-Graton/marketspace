@@ -10,10 +10,10 @@ import { useTheme } from "styled-components/native";
 import * as S from "./styles";
 
 interface Props {
-  announcement: any; // Use DTO type in here
+  children?: React.JSX.Element;
 }
 
-export function Content() {
+export function Content({ children }: Props) {
   const { COLORS } = useTheme();
 
   return (
@@ -74,6 +74,7 @@ export function Content() {
             <S.PaymentMethodTitle>Depósito Bancário</S.PaymentMethodTitle>
           </S.PaymentMethodOption>
         </S.Body>
+        <>{children}</>
       </S.Content>
     </>
   );
