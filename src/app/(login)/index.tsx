@@ -8,7 +8,6 @@ import { useAuthContext } from "@/hooks/useAuthContext.hook";
 import { AppButton } from "@/components/AppButton";
 import { AppInput } from "@/components/AppInput";
 import { AppFormTexts } from "@/components/AppFormTexts";
-import { AppLoader } from "@/components/AppLoader";
 
 import { AppError } from "@/utils/AppError.util";
 
@@ -27,7 +26,6 @@ import logoPng from "@/assets/logo.png";
 import { Eye, EyeClosed } from "phosphor-react-native";
 
 import * as S from "./styles";
-import { useTheme } from "styled-components/native";
 
 export default function Login() {
   const {
@@ -38,8 +36,6 @@ export default function Login() {
     resolver: yupResolver(loginSchema),
     defaultValues: DEFAULT_VALUES,
   });
-
-  const { COLORS } = useTheme();
 
   const { signIn, user } = useAuthContext();
 
