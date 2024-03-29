@@ -11,15 +11,20 @@ Será necessário refatorar o desenvolvimento da tela de detalhes de um anúncio
 
 A tela será dividida em outras 3 telas: 
 
-- Detalhes do Anúncio (de outra pessoa)
+- Detalhes do Anúncio (de outro usuário)
 - Detalhes do meu Anúncio
 - Pré-visualização do meu Anúncio
 
-Para refatorar posso colocar todo o conteúdo em comum entre as telas dentro de um componente global, enquanto os Headers e Footers
-vão ser alterados conforme necessário dentro das próprias telas.
+```
+|-home
+  |-announcement_details
 
-As telas: `AnnouncementsDetails` && `MyAnnouncementsDetails` vão receber parâmetros de rotas utilizados em sua versão anterior, 
-já na tela `MyAnnouncementPreview` não será necessário buscar os dados via API, já que eu posso apenas buscar do form anterior.
+|-announcements
+  |-my_announcements_details
+
+|-announcement_registration
+  |-my_announcement_preview
+```
 
 ## TODO
 
