@@ -18,6 +18,9 @@ A tela será dividida em outras 3 telas:
 Para refatorar posso colocar todo o conteúdo em comum entre as telas dentro de um componente global, enquanto os Headers e Footers
 vão ser alterados conforme necessário dentro das próprias telas.
 
+As telas: `AnnouncementsDetails` && `MyAnnouncementsDetails` vão receber parâmetros de rotas utilizados em sua versão anterior, 
+já na tela `MyAnnouncementPreview` não será necessário buscar os dados via API, já que eu posso apenas buscar do form anterior.
+
 ## TODO
 
 - [X] Desenvolvimento inicial das interfaces (layout, estilização)
