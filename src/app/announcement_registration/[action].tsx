@@ -2,6 +2,7 @@ import React from "react";
 import { router } from "expo-router";
 
 import { View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import { PaymentMethods } from "@/@types";
 
@@ -21,10 +22,12 @@ import {
   announcementRegistrationSchema,
 } from "@/schemas/announcement_registration.schema";
 
-import { Plus } from "phosphor-react-native";
+import Toast from "react-native-toast-message";
 
-import * as S from "./styles";
+import { Plus, X } from "phosphor-react-native";
+
 import { useTheme } from "styled-components/native";
+import * as S from "./styles";
 
 export default function AnnouncementRegistration() {
   const { COLORS, FONT_SIZE } = useTheme();
@@ -40,29 +43,76 @@ export default function AnnouncementRegistration() {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { append, remove } = useFieldArray({
+  const { name, images, payment_methods } = getValues();
+
+  console.log("Product Images: ", images);
+
+  const handleImagesActions = useFieldArray({
+    name: "images",
+    control,
+  });
+
+  const handlePaymentMethodsActions = useFieldArray({
     name: "payment_methods",
     control,
   });
 
   const [productPrice, setProductPrice] = React.useState<number | null>(0);
 
-  function onPressPaymentMethods(paymentMethodKey: PaymentMethods) {
-    const { payment_methods } = getValues();
+  async function onAddProductImages() {
+    const response = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
 
+    if (response.canceled) {
+      setValue("images", []);
+
+      return;
+    }
+
+    const selectedUri = response.assets[0];
+
+    if (selectedUri) {
+      if (selectedUri.fileSize && selectedUri.fileSize / 1024 / 1024 > 5) {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Essa imagem é muito grande. Escolha uma de até 5MB",
+        });
+        return;
+      }
+
+      const fileExtension = selectedUri.uri.split(".").pop();
+
+      const productImgFile = {
+        name: "", // Vai ser atualizado após enviar o resto dos dados do form
+        uri: selectedUri.uri,
+        type: `${selectedUri.type}/${fileExtension}`,
+      };
+
+      handleImagesActions.append(productImgFile);
+    }
+  }
+
+  function onRemoveProductImages(index: number) {
+    console.log("Pressed Image index: ", index);
+  }
+
+  function onPressPaymentMethods(paymentMethodKey: PaymentMethods) {
     const includesPaymentMethods = payment_methods.includes(paymentMethodKey);
 
     if (!includesPaymentMethods) {
-      append(paymentMethodKey);
+      handlePaymentMethodsActions.append(paymentMethodKey);
 
       return;
     }
 
     const removeWithIndex = payment_methods.indexOf(paymentMethodKey);
 
-    remove(removeWithIndex);
-
-    return;
+    handlePaymentMethodsActions.remove(removeWithIndex);
   }
 
   function onSubmit(data: IAnnouncementRegistrationSchema) {
@@ -82,18 +132,32 @@ export default function AnnouncementRegistration() {
               incrível!
             </S.SectionSubtitle>
           </View>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            {/* FIXME: This should be wayy more dynamic, like an Array or something... */}
-            <S.ProductImageSelector>
-              <Plus size={24} color={COLORS.GRAY_400} />
-            </S.ProductImageSelector>
-            {/* <S.ProductImageSelector>
-              <Plus size={24} color={COLORS.GRAY_400} />
-            </S.ProductImageSelector>
-            <S.ProductImageSelector>
-              <Plus size={24} color={COLORS.GRAY_400} />
-            </S.ProductImageSelector> */}
-          </View>
+          <Controller
+            control={control}
+            name="images"
+            render={({ field: {} }) => (
+              <>
+                <View style={{ flexDirection: "row", gap: 8 }}>
+                  {images.map((image, index) => (
+                    <View key={image.uri}>
+                      <S.ProductImage source={{ uri: image.uri }} />
+                      <S.ProductImageRemover
+                        onPress={() => onRemoveProductImages(index)}
+                      >
+                        <X size={16} color="white" />
+                      </S.ProductImageRemover>
+                    </View>
+                  ))}
+                  {images.length < 3 && (
+                    <S.ProductImageSelector onPress={onAddProductImages}>
+                      <Plus size={24} color={COLORS.GRAY_400} />
+                    </S.ProductImageSelector>
+                  )}
+                </View>
+                <AppFormTexts errorMessage={errors.images?.message} />
+              </>
+            )}
+          />
         </S.ProductImageSection>
         <S.ProductDetailsSection>
           <View style={{ gap: 32 }}>
@@ -119,7 +183,7 @@ export default function AnnouncementRegistration() {
                 name="description"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <>
-                    <AppInput
+                    <S.TextArea
                       placeholder="Descrição do produto"
                       multiline
                       numberOfLines={10}
@@ -165,7 +229,6 @@ export default function AnnouncementRegistration() {
                 name="price"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <>
-                    {/* Passar o valor do campo com ou sem a formatação de currency? */}
                     <S.ProductPrice
                       value={productPrice}
                       onChangeValue={setProductPrice}

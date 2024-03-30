@@ -1,7 +1,18 @@
 import * as yup from "yup";
 
-// Seria mais interessante se 'price' fosse do tipo number
 const announcementRegistrationSchema = yup.object({
+  images: yup
+    .array()
+    .of(
+      yup.object({
+        name: yup.string(),
+        type: yup.string(),
+        uri: yup.string(),
+      })
+    )
+    .required("Imagens do seu produto são obrigatórias")
+    .min(1, "É obrigatório enviar apenas uma imagem de seu produto")
+    .max(3, "É permitido enviar até 3 imagens de seu produto"),
   name: yup.string().required("Nome do Produto é obrigatório"),
   description: yup.string().required("Descrição do Produto é obrigatório"),
   is_new: yup.boolean().required("Estado do Produto é obrigatório"),
@@ -15,6 +26,7 @@ const announcementRegistrationSchema = yup.object({
 });
 
 interface IAnnouncementRegistrationSchema {
+  images: Array<any>;
   name: string;
   description: string;
   is_new: boolean;
@@ -24,6 +36,7 @@ interface IAnnouncementRegistrationSchema {
 }
 
 const DEFAULT_VALUES = {
+  images: [],
   name: "",
   description: "",
   is_new: true,

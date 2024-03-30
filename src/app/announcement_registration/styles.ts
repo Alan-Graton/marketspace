@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components/native";
 
 import { AppIconButton } from "@/components/AppIconButton";
+import { AppInput } from "@/components/AppInput";
 
 import { CheckBox } from "@rneui/base";
-
 import CurrencyInput from "react-native-currency-input";
 
 export const Container = styled.ScrollView.attrs(({}) => ({
@@ -47,6 +47,35 @@ export const ProductImageSelector = styled(AppIconButton)`
   justify-content: center;
 
   border-radius: 6px;
+`;
+
+export const ProductImage = styled.Image`
+  width: 100px;
+  height: 100px;
+
+  border-radius: 6px;
+`;
+
+export const ProductImageRemover = styled(AppIconButton)`
+  position: absolute;
+
+  top: 5px;
+  right: 5px;
+
+  background-color: ${({ theme }) => theme.COLORS.GRAY_300};
+
+  border-radius: 50px;
+
+  padding: 2px;
+`;
+
+export const TextArea = styled(AppInput).attrs(({}) => ({
+  multiline: true,
+  numberOfLines: 10,
+}))`
+  height: 160px;
+
+  text-align-vertical: top;
 `;
 
 export const ProductDetailsSection = styled.View``;
