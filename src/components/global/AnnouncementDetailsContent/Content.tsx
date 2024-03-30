@@ -4,26 +4,86 @@ import { View, Text } from "react-native";
 
 import { AppStatusBadge } from "@/components/AppStatusBadge";
 
-import { Bank, Barcode, QrCode } from "phosphor-react-native";
+import { ProductsDTO } from "@/dtos/Products.dto";
+
+import {
+  Bank,
+  Barcode,
+  QrCode,
+  Money,
+  CreditCard,
+  ArrowRight,
+} from "phosphor-react-native";
 
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
+import { PaymentMethods } from "@/@types";
+import { FlatList } from "react-native";
 
 interface Props {
   children?: React.JSX.Element;
+  product: ProductsDTO;
 }
 
-export function Content({ children }: Props) {
+export function Content({ children, product }: Props) {
   const { COLORS } = useTheme();
+
+  const paymentMethodIcons = {
+    boleto: { Icon: Barcode, title: "Boleto" },
+    pix: { Icon: QrCode, title: "Pix" },
+    cash: { Icon: Money, title: "Dinheiro" },
+    card: { Icon: CreditCard, title: "Cartão de Crédito" },
+    deposit: { Icon: Bank, title: "Depósito Bancário" },
+  };
+
+  function handlePaymentMethodIcon(paymentMethod: PaymentMethods) {
+    const { Icon, title } = paymentMethodIcons[paymentMethod];
+    return (
+      <>
+        <Icon size={18} color={COLORS.GRAY_100} />
+        <S.PaymentMethodTitle>{title}</S.PaymentMethodTitle>
+      </>
+    );
+  }
 
   return (
     <>
       <S.Content>
         <S.Header>
-          <S.AnnouncementImg
-            source={require("@/assets/product1.png")}
-            resizeMode="stretch"
+          <FlatList
+            data={product.images}
+            keyExtractor={(item) => item.uri}
+            horizontal
+            renderItem={({ item }) => (
+              <S.AnnouncementImg
+                source={{ uri: item.uri }}
+                style={{
+                  width: 375,
+                  height: "100%",
+                }}
+                resizeMode="stretch"
+              />
+            )}
+            contentContainerStyle={{
+              gap: 5,
+            }}
+            pagingEnabled
           />
+          <View
+            style={{
+              position: "absolute",
+              right: 10,
+              top: 135,
+              backgroundColor: COLORS.GRAY_400,
+              width: 30,
+              height: 30,
+              borderRadius: 50,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ArrowRight size={20} color="white" />
+          </View>
         </S.Header>
         <S.Body>
           <S.AuthorSection>
@@ -32,47 +92,40 @@ export function Content({ children }: Props) {
           </S.AuthorSection>
           <S.ProductDetailsSection>
             <AppStatusBadge
-              // status={announcementDetails?.status}
-              status={"NOVO"} // For testing only
+              status={product.is_new}
               style={{
                 maxWidth: 70,
               }}
             />
             <View style={{ gap: 8 }}>
               <S.ProductPriceNameWrapper>
-                <S.ProductName>Tênis vermelho</S.ProductName>
+                <S.ProductName>{product.name}</S.ProductName>
                 <View style={{ flexDirection: "row", alignItems: "baseline" }}>
                   <S.DollarSign>R$</S.DollarSign>
-                  <S.ProductPrice>69,00</S.ProductPrice>
+                  <S.ProductPrice>
+                    {String(product.price).split("R$")[1]}
+                  </S.ProductPrice>
                 </View>
               </S.ProductPriceNameWrapper>
               <Text style={{ color: COLORS.GRAY_200 }}>
-                O Tênis Redley Originals Summer em vermelho é uma escolha
-                perfeita para quem busca versatilidade e estilo no dia a dia.
+                {product.description}
               </Text>
             </View>
           </S.ProductDetailsSection>
           <S.ProductHasTradeSection>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <S.ProductHasTradeTitle>Aceita troca?</S.ProductHasTradeTitle>
-              <S.HasTrade>Não</S.HasTrade>
+              <S.HasTrade>{product.accept_trade ? "Sim" : "Não"}</S.HasTrade>
             </View>
           </S.ProductHasTradeSection>
           <S.PaymentMethodSectionTitle>
             Meio de pagamento:
           </S.PaymentMethodSectionTitle>
-          <S.PaymentMethodOption>
-            <Barcode size={18} color={COLORS.GRAY_100} />
-            <S.PaymentMethodTitle>Boleto</S.PaymentMethodTitle>
-          </S.PaymentMethodOption>
-          <S.PaymentMethodOption>
-            <QrCode size={18} color={COLORS.GRAY_100} />
-            <S.PaymentMethodTitle>Pix</S.PaymentMethodTitle>
-          </S.PaymentMethodOption>
-          <S.PaymentMethodOption>
-            <Bank size={18} color={COLORS.GRAY_100} />
-            <S.PaymentMethodTitle>Depósito Bancário</S.PaymentMethodTitle>
-          </S.PaymentMethodOption>
+          {product.payment_methods.map((paymentMethod) => (
+            <S.PaymentMethodOption key={paymentMethod}>
+              {handlePaymentMethodIcon(paymentMethod)}
+            </S.PaymentMethodOption>
+          ))}
         </S.Body>
         <>{children}</>
       </S.Content>

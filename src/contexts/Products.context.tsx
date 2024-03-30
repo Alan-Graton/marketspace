@@ -3,6 +3,7 @@ import React, { SetStateAction, useState } from "react";
 import { api } from "@/service/api";
 
 import { ProductsDTO } from "@/dtos/Products.dto";
+import { PaymentMethods } from "@/@types";
 
 export interface ProductsContext {
   products: Array<ProductsDTO>;
@@ -14,7 +15,7 @@ export interface ProductsContext {
   getProducts: () => Promise<void>;
   getProductDetails: (id: string) => Promise<void>;
   getUserProducts: () => Promise<void>;
-  postProducts: () => Promise<void>;
+  postProducts: (product: ProductsDTO) => Promise<void>;
   putProducts: (id: string) => Promise<void>;
   patchProducts: (id: string) => Promise<void>;
   deleteProducts: (id: string) => Promise<void>;
@@ -64,8 +65,15 @@ export function ProductsProvider({ children }: IProps) {
       throw error;
     }
   }
-  async function postProducts() {
+  /**
+   * Deverá cadastrar tanto os dados do form, quanto as imagens.
+   *
+   * Para o gravação das imagens será necessário uma nova requisição, e enviar apenas os dados
+   * necessários para a rota de POST dos produtos
+   */
+  async function postProducts(product: ProductsDTO) {
     try {
+      await api.post("products", product);
     } catch (error) {
       console.error("postProducts FAILED: ", error);
       throw error;

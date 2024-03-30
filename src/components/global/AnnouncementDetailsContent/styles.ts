@@ -11,14 +11,14 @@ export const Container = styled(SafeAreaView)`
 export const Content = styled.View``;
 
 export const Header = styled.View`
-  background-color: red;
+  /* background-color: red; */
 
   height: 280px;
 `;
 
 export const AnnouncementImg = styled.Image`
-  width: 100%;
-  flex: 1;
+  /* width: 100%;
+  flex: 1; */
 `;
 
 export const Body = styled.View`

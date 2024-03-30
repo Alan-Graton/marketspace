@@ -6,6 +6,8 @@ import * as ImagePicker from "expo-image-picker";
 
 import { PaymentMethods } from "@/@types";
 
+import { useProductsContext } from "@/hooks/useProductsContext.hook";
+
 import { AppButton } from "@/components/AppButton";
 import { AppInput } from "@/components/AppInput";
 import { AppFormTexts } from "@/components/AppFormTexts";
@@ -21,6 +23,9 @@ import {
   IAnnouncementRegistrationSchema,
   announcementRegistrationSchema,
 } from "@/schemas/announcement_registration.schema";
+
+// Seria melhor usar a DTO como tipagem para o todo esse schema
+import { ProductsDTO } from "@/dtos/Products.dto";
 
 import Toast from "react-native-toast-message";
 
@@ -38,14 +43,14 @@ export default function AnnouncementRegistration() {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<IAnnouncementRegistrationSchema>({
-    resolver: yupResolver(announcementRegistrationSchema),
+  } = useForm({
+    resolver: yupResolver<IAnnouncementRegistrationSchema>(
+      announcementRegistrationSchema
+    ),
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { name, images, payment_methods } = getValues();
-
-  console.log("Product Images: ", images);
+  const { images, payment_methods } = getValues();
 
   const handleImagesActions = useFieldArray({
     name: "images",
@@ -56,6 +61,8 @@ export default function AnnouncementRegistration() {
     name: "payment_methods",
     control,
   });
+
+  const { setSelectedProduct } = useProductsContext();
 
   const [productPrice, setProductPrice] = React.useState<number | null>(0);
 
@@ -111,10 +118,9 @@ export default function AnnouncementRegistration() {
     handlePaymentMethodsActions.remove(removeWithIndex);
   }
 
-  function onSubmit(data: IAnnouncementRegistrationSchema) {
-    console.log("Announcement Registration Form Data: ", data);
-
-    // router.push("/my_announcement_preview/");
+  function onSubmit(data: any) {
+    setSelectedProduct((prevState) => (prevState = data as ProductsDTO));
+    router.push("/my_announcement_preview/");
   }
 
   return (

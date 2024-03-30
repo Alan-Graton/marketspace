@@ -1,8 +1,9 @@
 import React from "react";
+import { router } from "expo-router";
 
 import { ScrollView } from "react-native";
 
-import { router } from "expo-router";
+import { useProductsContext } from "@/hooks/useProductsContext.hook";
 
 import { AnnouncementDetailsRoot } from "@/components/global/AnnouncementDetailsContent/Root";
 import { AppButton } from "@/components/AppButton";
@@ -17,10 +18,12 @@ import * as S from "./styles";
 export default function MyAnnouncementPreview() {
   const { COLORS } = useTheme();
 
+  const { selectedProduct } = useProductsContext();
+
   return (
     <S.Container>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <AnnouncementDetailsRoot.Content />
+        <AnnouncementDetailsRoot.Content product={selectedProduct} />
       </ScrollView>
       <AnnouncementDetailsRoot.Footer>
         <S.Footer>

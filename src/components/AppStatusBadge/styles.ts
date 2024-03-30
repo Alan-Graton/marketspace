@@ -3,13 +3,13 @@ import styled, { css } from "styled-components/native";
 import { ProductStatus } from "@/@types";
 
 interface StatusBadgeStyleProps {
-  status: ProductStatus;
+  status: Boolean;
   hasIcon?: Boolean;
 }
 
 export const Container = styled.View<StatusBadgeStyleProps>`
   ${({ theme, status }) => css`
-    background-color: ${status === 1
+    background-color: ${status
       ? theme.COLORS.BLUE_LIGHT
       : theme.COLORS.GRAY_200};
   `}
