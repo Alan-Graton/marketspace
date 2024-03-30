@@ -9,6 +9,12 @@ export type ProductStatus = 0 | 1;
 
 export type PaymentMethods = "boleto" | "pix" | "cash" | "card" | "deposit";
 
+export interface ProductImage {
+  name: string;
+  type: string;
+  uri: string;
+}
+
 export interface IAnnouncement {
   key: number;
   item: number;
