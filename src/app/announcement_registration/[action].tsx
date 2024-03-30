@@ -97,10 +97,6 @@ export default function AnnouncementRegistration() {
     }
   }
 
-  function onRemoveProductImages(index: number) {
-    console.log("Pressed Image index: ", index);
-  }
-
   function onPressPaymentMethods(paymentMethodKey: PaymentMethods) {
     const includesPaymentMethods = payment_methods.includes(paymentMethodKey);
 
@@ -142,7 +138,7 @@ export default function AnnouncementRegistration() {
                     <View key={image.uri}>
                       <S.ProductImage source={{ uri: image.uri }} />
                       <S.ProductImageRemover
-                        onPress={() => onRemoveProductImages(index)}
+                        onPress={() => handleImagesActions.remove(index)}
                       >
                         <X size={16} color="white" />
                       </S.ProductImageRemover>
