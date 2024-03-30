@@ -1,4 +1,4 @@
-import { ProductStatus } from "@/@types";
+import { PaymentMethods, ProductStatus } from "@/@types";
 
 export interface ProductsDTO {
   id: string;
@@ -9,5 +9,5 @@ export interface ProductsDTO {
   accept_trade: number;
   user_id: string;
   is_active: number;
-  payment_methods: Array<Array<string>>;
+  payment_methods: Array<PaymentMethods>;
 }

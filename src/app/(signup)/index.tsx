@@ -247,6 +247,7 @@ export default function SignUp() {
                     onChangeText={onChange}
                     value={value}
                     maxLength={9}
+                    keyboardType="numeric"
                   />
                   <AppFormTexts errorMessage={errors.tel?.message} />
                 </>

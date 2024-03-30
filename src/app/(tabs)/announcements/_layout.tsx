@@ -35,7 +35,7 @@ export default function AnnouncementsLayout() {
             <AppIconButton
               style={{ padding: 10 }}
               onPress={() => {
-                router.push("/announcement_registration/");
+                router.push("/announcement_registration/new");
               }}
             >
               <Plus />

@@ -7,6 +7,8 @@ export type AnnouncementStatus = "NOVO" | "USADO";
  */
 export type ProductStatus = 0 | 1;
 
+export type PaymentMethods = "boleto" | "pix" | "cash" | "card" | "deposit";
+
 export interface IAnnouncement {
   key: number;
   item: number;
