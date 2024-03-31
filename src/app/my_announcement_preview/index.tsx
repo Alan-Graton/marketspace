@@ -4,9 +4,14 @@ import { router } from "expo-router";
 import { ScrollView } from "react-native";
 
 import { useProductsContext } from "@/hooks/useProductsContext.hook";
+import { useAuthContext } from "@/hooks/useAuthContext.hook";
 
 import { AnnouncementDetailsRoot } from "@/components/global/AnnouncementDetailsContent/Root";
 import { AppButton } from "@/components/AppButton";
+
+import { AppError } from "@/utils/AppError.util";
+
+import Toast from "react-native-toast-message";
 
 import { ArrowLeft, Tag } from "phosphor-react-native";
 
@@ -15,6 +20,8 @@ import * as S from "./styles";
 
 export default function MyAnnouncementPreview() {
   const { COLORS } = useTheme();
+
+  const { user } = useAuthContext();
 
   const {
     selectedProduct,
@@ -28,13 +35,43 @@ export default function MyAnnouncementPreview() {
     try {
       setLoading(true);
 
-      const response = await postProducts(selectedProduct);
+      const { data } = await postProducts({
+        ...selectedProduct,
+        price: Number(
+          selectedProduct.price
+            .toString()
+            .replace("R$", "")
+            .replaceAll(",", "")
+            .replaceAll(".", "")
+        ),
+      });
 
-      console.log("Submition response: ", response);
+      await postProductImages(
+        data.id,
+        user.name.trim(),
+        selectedProduct.images
+      );
 
-      await postProductImages(response?.data.id, selectedProduct.images);
+      Toast.show({
+        type: "success",
+        text1: "Parabéns!",
+        text2: "Seu anúncio foi cadastrado com sucesso!",
+      });
+
+      router.push("/(tabs)/announcements");
     } catch (error) {
       console.error("submitProductAnnouncement FAILED: ", error);
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível entrar. Tente novamente mais tarde.";
+
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: title,
+      });
     } finally {
       setLoading(false);
     }

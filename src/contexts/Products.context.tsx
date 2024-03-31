@@ -21,6 +21,7 @@ export interface ProductsContext {
   postProducts: (product: ProductsDTO) => Promise<AxiosResponse<any, any>>;
   postProductImages: (
     product_id: string,
+    username: string,
     images: Array<ProductImage>
   ) => Promise<AxiosResponse<any, any>>;
   putProducts: (id: string) => Promise<void>;
@@ -91,17 +92,9 @@ export function ProductsProvider({ children }: IProps) {
       setLoading(false);
     }
   }
-  /**
-   * Deverá cadastrar tanto os dados do form, quanto as imagens.
-   *
-   * Para o gravação das imagens será necessário uma nova requisição, e enviar apenas os dados
-   * necessários para a rota de POST dos produtos
-   */
   async function postProducts(product: ProductsDTO) {
     try {
       setLoading(true);
-
-      console.log("Submiting Product announcement: ", product);
 
       const response = await api.post("products", product);
 
@@ -115,6 +108,7 @@ export function ProductsProvider({ children }: IProps) {
   }
   async function postProductImages(
     product_id: string,
+    username: string,
     images: Array<ProductImage>
   ) {
     try {
@@ -123,9 +117,12 @@ export function ProductsProvider({ children }: IProps) {
       const formData = new FormData();
 
       formData.append("product_id", product_id);
-      formData.append("images", images);
-
-      console.log("Submiting product images: ", formData);
+      images.forEach((img) => {
+        formData.append("images", {
+          ...img,
+          name: `${username}.${img.name}`.toLocaleLowerCase(),
+        });
+      });
 
       const response = await api.post("products/images", formData, {
         headers: {
@@ -135,7 +132,7 @@ export function ProductsProvider({ children }: IProps) {
 
       return response;
     } catch (error) {
-      console.error("postProducts FAILED: ", error);
+      console.error("postProductImages FAILED: ", error);
       throw error;
     } finally {
       setLoading(false);

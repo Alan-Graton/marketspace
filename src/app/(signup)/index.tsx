@@ -25,6 +25,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { handleGoBack } from "@/utils/handleGoBack.util";
+import { AppError } from "@/utils/AppError.util";
 
 import logoPng from "@/assets/logo.png";
 import defaultAvatar from "@/assets/defaultAvatar.png";
@@ -152,7 +153,7 @@ export default function SignUp() {
 
       const avatarForm = {
         ...selectedAvatar.photo,
-        name: `${name}.${fileType}`.toLowerCase(),
+        name: `${name.trim()}.${fileType}`.toLowerCase(),
       };
 
       formData.append("name", name);
@@ -170,6 +171,17 @@ export default function SignUp() {
       router.push("/(tabs)/home");
     } catch (error) {
       console.error("sign up FAILED: ", error);
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível entrar. Tente novamente mais tarde.";
+
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: title,
+      });
     } finally {
       setLoading(false);
     }

@@ -6,7 +6,7 @@ export interface ProductsDTO {
   name: string;
   description: string;
   is_new: boolean;
-  price: string;
+  price: string | number;
   accept_trade: boolean;
   is_active?: boolean;
   payment_methods: Array<PaymentMethods>;
