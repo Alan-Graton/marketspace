@@ -62,11 +62,15 @@ export const ProductImageRemover = styled(AppIconButton)`
   top: 5px;
   right: 5px;
 
-  background-color: ${({ theme }) => theme.COLORS.GRAY_300};
+  width: 16px;
+  height: 16px;
+
+  align-items: center;
+  justify-content: center;
+
+  background-color: ${({ theme }) => theme.COLORS.GRAY_200};
 
   border-radius: 50px;
-
-  padding: 2px;
 `;
 
 export const TextArea = styled(AppInput).attrs(({}) => ({

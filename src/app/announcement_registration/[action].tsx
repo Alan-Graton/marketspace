@@ -171,7 +171,7 @@ export default function AnnouncementRegistration() {
                       <S.ProductImageRemover
                         onPress={() => handleImagesActions.remove(index)}
                       >
-                        <X size={16} color="white" />
+                        <X size={12} color={COLORS.GRAY_700} />
                       </S.ProductImageRemover>
                     </View>
                   ))}
