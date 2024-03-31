@@ -15,10 +15,13 @@ import { BottomSheetHeader } from "./components/BottomSheetComponents/BottomShee
 import { BottomSheetBody } from "./components/BottomSheetComponents/BottomSheetBody";
 import { BottomSheetFooter } from "./components/BottomSheetComponents/BottomSheetFooter";
 
+import { ProductsDTO } from "@/dtos/Products.dto";
+
 import * as S from "./styles";
 
 export default function Home() {
-  const { products, setProducts, getProducts } = useProductsContext();
+  const { products, setProducts, getProducts, setSelectedProduct } =
+    useProductsContext();
 
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
@@ -27,6 +30,18 @@ export default function Home() {
       async function fetchData() {
         await getProducts();
       }
+
+      setSelectedProduct({
+        id: "",
+        images: [],
+        name: "",
+        description: "",
+        is_new: false,
+        price: "R$00,00",
+        accept_trade: false,
+        is_active: false,
+        payment_methods: [],
+      } as ProductsDTO);
 
       fetchData();
     }, [])

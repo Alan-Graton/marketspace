@@ -1,9 +1,5 @@
 import * as yup from "yup";
 
-import { PaymentMethods, ProductImage } from "@/@types";
-
-import { ProductsDTO } from "@/dtos/Products.dto";
-
 const announcementRegistrationSchema = yup.object({
   images: yup
     .array()
@@ -31,7 +27,6 @@ const announcementRegistrationSchema = yup.object({
   payment_methods: yup
     .array()
     .of(yup.string().required())
-    // .of(yup.mixed<PaymentMethods>())
     .min(1, "É obrigatório selecionar ao menos um Método de Pagamento")
     .required("Método de Pagamento é obrigatório"),
 });
@@ -51,7 +46,7 @@ const DEFAULT_VALUES = {
   name: "",
   description: "",
   is_new: true,
-  price: "R$0,00",
+  price: "R$00,00",
   accept_trade: false,
   payment_methods: [],
 };

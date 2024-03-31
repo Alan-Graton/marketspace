@@ -13,7 +13,7 @@ export default function AnnouncementRegistrationLayout() {
 
   const HANDLE_ROUTE_TITLE = {
     new: "Criar anúncio",
-    edit: "Edit anúncio",
+    edit: "Editar anúncio",
   };
 
   const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();

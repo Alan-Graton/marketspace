@@ -1,9 +1,14 @@
 import React from "react";
 
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
+
+import { useAuthContext } from "@/hooks/useAuthContext.hook";
 
 import { AppStatusBadge } from "@/components/AppStatusBadge";
 
+import { handleUserAvatar } from "@/utils/handleUserAvatar.util";
+
+import { PaymentMethods } from "@/@types";
 import { ProductsDTO } from "@/dtos/Products.dto";
 
 import {
@@ -17,8 +22,6 @@ import {
 
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
-import { PaymentMethods } from "@/@types";
-import { FlatList } from "react-native";
 
 interface Props {
   children?: React.JSX.Element;
@@ -27,6 +30,8 @@ interface Props {
 
 export function Content({ children, product }: Props) {
   const { COLORS } = useTheme();
+
+  const { user } = useAuthContext();
 
   const paymentMethodIcons = {
     boleto: { Icon: Barcode, title: "Boleto" },
@@ -53,42 +58,24 @@ export function Content({ children, product }: Props) {
           <FlatList
             data={product.images}
             keyExtractor={(item) => item.uri}
-            horizontal
             renderItem={({ item }) => (
-              <S.AnnouncementImg
-                source={{ uri: item.uri }}
-                style={{
-                  width: 375,
-                  height: "100%",
-                }}
-                resizeMode="stretch"
-              />
+              <S.AnnouncementImg source={{ uri: item.uri }} />
             )}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            pagingEnabled
             contentContainerStyle={{
               gap: 5,
             }}
-            pagingEnabled
           />
-          <View
-            style={{
-              position: "absolute",
-              right: 10,
-              top: 135,
-              backgroundColor: COLORS.GRAY_400,
-              width: 30,
-              height: 30,
-              borderRadius: 50,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <S.NextItemIndicator>
             <ArrowRight size={20} color="white" />
-          </View>
+          </S.NextItemIndicator>
         </S.Header>
         <S.Body>
           <S.AuthorSection>
-            <S.AuthorAvatar source={require("@/assets/defaultAvatar.png")} />
-            <S.AuthorName>Alan Graton</S.AuthorName>
+            <S.AuthorAvatar source={handleUserAvatar(user)} />
+            <S.AuthorName>{user.name}</S.AuthorName>
           </S.AuthorSection>
           <S.ProductDetailsSection>
             <AppStatusBadge

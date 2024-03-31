@@ -11,14 +11,31 @@ export const Container = styled(SafeAreaView)`
 export const Content = styled.View``;
 
 export const Header = styled.View`
-  /* background-color: red; */
-
   height: 280px;
 `;
 
-export const AnnouncementImg = styled.Image`
-  /* width: 100%;
-  flex: 1; */
+export const NextItemIndicator = styled.View`
+  position: absolute;
+
+  right: 10px;
+  top: 135px;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50px;
+
+  background-color: ${({ theme }) => theme.COLORS.GRAY_400};
+`;
+
+export const AnnouncementImg = styled.Image.attrs(({}) => ({
+  resizeMode: "stretch",
+}))`
+  width: 375px;
+  height: 100%;
 `;
 
 export const Body = styled.View`
@@ -34,6 +51,8 @@ export const AuthorSection = styled.View`
 export const AuthorAvatar = styled.Image`
   width: 24px;
   height: 24px;
+
+  border-radius: 50px;
 `;
 
 export const AuthorName = styled.Text`

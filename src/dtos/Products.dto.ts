@@ -1,14 +1,13 @@
-import { PaymentMethods, ProductImage, ProductStatus } from "@/@types";
+import { PaymentMethods, ProductImage } from "@/@types";
 
 export interface ProductsDTO {
-  id: string;
+  id?: string;
   images: Array<ProductImage>;
   name: string;
   description: string;
   is_new: boolean;
-  price: number;
+  price: string;
   accept_trade: boolean;
-  user_id: string;
-  is_active: boolean;
+  is_active?: boolean;
   payment_methods: Array<PaymentMethods>;
 }

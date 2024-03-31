@@ -3,9 +3,10 @@ import React, { SetStateAction, useState } from "react";
 import { api } from "@/service/api";
 
 import { ProductsDTO } from "@/dtos/Products.dto";
-import { PaymentMethods } from "@/@types";
 
 export interface ProductsContext {
+  loading: boolean;
+  setLoading: React.Dispatch<SetStateAction<boolean>>;
   products: Array<ProductsDTO>;
   setProducts: React.Dispatch<SetStateAction<Array<ProductsDTO>>>;
   userProducts: Array<ProductsDTO>;
@@ -28,14 +29,25 @@ interface IProps {
 }
 
 export function ProductsProvider({ children }: IProps) {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [products, setProducts] = useState<Array<ProductsDTO>>([]);
   const [userProducts, setUserProducts] = useState<Array<ProductsDTO>>([]);
-  const [selectedProduct, setSelectedProduct] = useState<ProductsDTO>(
-    {} as ProductsDTO
-  );
+  const [selectedProduct, setSelectedProduct] = useState<ProductsDTO>({
+    id: "",
+    images: [],
+    name: "",
+    description: "",
+    is_new: false,
+    price: "R$00,00",
+    accept_trade: false,
+    is_active: false,
+    payment_methods: [],
+  });
 
   async function getProducts() {
     try {
+      setLoading(true);
       const { data } = await api.get("products");
 
       console.log("getProducts RESPONSE: ", data);
@@ -44,17 +56,23 @@ export function ProductsProvider({ children }: IProps) {
     } catch (error) {
       console.error("getProducts FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
   async function getProductDetails(id: string) {
     try {
+      setLoading(true);
     } catch (error) {
       console.error("getProductDetails FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
   async function getUserProducts() {
     try {
+      setLoading(true);
       const { data } = await api.get("users/products");
 
       console.log("getUserProducts RESPONSE: ", data);
@@ -63,6 +81,8 @@ export function ProductsProvider({ children }: IProps) {
     } catch (error) {
       console.error("getUserProducts FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
   /**
@@ -73,37 +93,51 @@ export function ProductsProvider({ children }: IProps) {
    */
   async function postProducts(product: ProductsDTO) {
     try {
+      setLoading(true);
       await api.post("products", product);
     } catch (error) {
       console.error("postProducts FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
   async function putProducts(id: string) {
     try {
+      setLoading(true);
     } catch (error) {
       console.error("putProducts FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
   async function patchProducts(id: string) {
     try {
+      setLoading(true);
     } catch (error) {
       console.error("patchProducts FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
   async function deleteProducts(id: string) {
     try {
+      setLoading(true);
     } catch (error) {
       console.error("deleteProducts FAILED: ", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <ProductsContext.Provider
       value={{
+        loading,
+        setLoading,
         products,
         setProducts,
         userProducts,

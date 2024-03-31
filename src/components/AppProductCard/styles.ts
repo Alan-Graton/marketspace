@@ -1,9 +1,7 @@
 import styled, { css } from "styled-components/native";
 
-import { ProductStatus } from "@/@types";
-
 interface BadgeStyleProps {
-  status: ProductStatus;
+  status: boolean;
 }
 
 export const Container = styled.View`
@@ -46,7 +44,7 @@ export const Avatar = styled.Image`
 
 export const StatusBadge = styled.View<BadgeStyleProps>`
   ${({ theme, status }) => css`
-    background-color: ${status === 1
+    background-color: ${status
       ? theme.COLORS.BLUE_LIGHT
       : theme.COLORS.GRAY_200};
   `}

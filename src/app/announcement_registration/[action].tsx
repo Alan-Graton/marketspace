@@ -37,6 +37,8 @@ import * as S from "./styles";
 export default function AnnouncementRegistration() {
   const { COLORS, FONT_SIZE } = useTheme();
 
+  const { selectedProduct, setSelectedProduct } = useProductsContext();
+
   const {
     control,
     handleSubmit,
@@ -47,7 +49,9 @@ export default function AnnouncementRegistration() {
     resolver: yupResolver<IAnnouncementRegistrationSchema>(
       announcementRegistrationSchema
     ),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: selectedProduct.name
+      ? (selectedProduct as unknown as typeof DEFAULT_VALUES)
+      : DEFAULT_VALUES,
   });
 
   const { images, payment_methods } = getValues();
@@ -62,9 +66,15 @@ export default function AnnouncementRegistration() {
     control,
   });
 
-  const { setSelectedProduct } = useProductsContext();
-
-  const [productPrice, setProductPrice] = React.useState<number | null>(0);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [productPrice, setProductPrice] = React.useState<number | null>(
+    Number(
+      selectedProduct.price
+        .replaceAll(",", "")
+        .replaceAll(".", "")
+        .replace("R$", "")
+    )
+  );
 
   async function onAddProductImages() {
     const response = await ImagePicker.launchImageLibraryAsync({
@@ -119,7 +129,22 @@ export default function AnnouncementRegistration() {
   }
 
   function onSubmit(data: any) {
-    setSelectedProduct((prevState) => (prevState = data as ProductsDTO));
+    const payload = data as ProductsDTO;
+
+    setLoading(true);
+
+    payload.images.forEach((image, index) => {
+      if (image.name) return;
+
+      // Realmente preciso fazer assim, alterar diretamente no form?
+      handleImagesActions.update(index, {
+        ...image,
+        name: payload["name"].trim(),
+      });
+    });
+
+    setSelectedProduct((prevState) => (prevState = payload));
+    setLoading(false);
     router.push("/my_announcement_preview/");
   }
 
@@ -282,31 +307,31 @@ export default function AnnouncementRegistration() {
                         <S.PaymentMethodsCheckBox
                           title="Boleto"
                           key="boleto"
-                          checked={value.includes("boleto")}
+                          checked={value?.includes("boleto")}
                           onPress={() => onPressPaymentMethods("boleto")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Pix"
                           key="pix"
-                          checked={value.includes("pix")}
+                          checked={value?.includes("pix")}
                           onPress={() => onPressPaymentMethods("pix")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Dinheiro"
                           key="cash"
-                          checked={value.includes("cash")}
+                          checked={value?.includes("cash")}
                           onPress={() => onPressPaymentMethods("cash")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Cartão de Crédito"
                           key="card"
-                          checked={value.includes("card")}
+                          checked={value?.includes("card")}
                           onPress={() => onPressPaymentMethods("card")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Depósito Bancário"
                           key="deposit"
-                          checked={value.includes("deposit")}
+                          checked={value?.includes("deposit")}
                           onPress={() => onPressPaymentMethods("deposit")}
                         />
 
@@ -333,6 +358,7 @@ export default function AnnouncementRegistration() {
           title="Avançar"
           style={{ flex: 1 }}
           type="ternary"
+          loading={loading}
           onPress={handleSubmit(onSubmit)}
         />
       </S.Footer>
