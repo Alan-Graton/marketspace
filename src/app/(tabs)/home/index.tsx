@@ -23,6 +23,10 @@ export default function Home() {
   const { products, setProducts, getProducts, setSelectedProduct } =
     useProductsContext();
 
+  const USER_ACTIVE_PRODUCTS = products.filter(
+    (product) => product.is_active
+  ).length;
+
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   useFocusEffect(
@@ -53,7 +57,7 @@ export default function Home() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <S.Content>
             <S.Header>
-              <AnnouncementsCounter />
+              <AnnouncementsCounter counter={USER_ACTIVE_PRODUCTS} />
             </S.Header>
             <S.Body>
               <ProductsFilter

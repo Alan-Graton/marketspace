@@ -1,16 +1,22 @@
 import { View } from "react-native";
 
+import { router } from "expo-router";
+
 import * as S from "./styles";
 
-export function AnnouncementsCounter() {
+interface Props {
+  counter: number;
+}
+
+export function AnnouncementsCounter({ counter }: Props) {
   return (
     <S.Container>
       <S.Title>Seus produtos anunciados para venda</S.Title>
-      <S.Card>
+      <S.Card onPress={() => router.push("/(tabs)/announcements")}>
         <S.LeftContentContainer>
           <S.TagIcon />
           <View>
-            <S.Counter>4</S.Counter>
+            <S.Counter>{counter}</S.Counter>
             <S.GrayLabel>anúncios ativos</S.GrayLabel>
           </View>
         </S.LeftContentContainer>
