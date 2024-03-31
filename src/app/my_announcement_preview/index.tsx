@@ -16,15 +16,27 @@ import * as S from "./styles";
 export default function MyAnnouncementPreview() {
   const { COLORS } = useTheme();
 
-  const { selectedProduct, loading, postProducts } = useProductsContext();
+  const {
+    selectedProduct,
+    loading,
+    setLoading,
+    postProducts,
+    postProductImages,
+  } = useProductsContext();
 
-  /** TODO: Adicionar envio das imagens após o envio dos dados gerais
-   */
   async function submitProductAnnouncement() {
     try {
-      await postProducts(selectedProduct);
+      setLoading(true);
+
+      const response = await postProducts(selectedProduct);
+
+      console.log("Submition response: ", response);
+
+      await postProductImages(response?.data.id, selectedProduct.images);
     } catch (error) {
       console.error("submitProductAnnouncement FAILED: ", error);
+    } finally {
+      setLoading(false);
     }
   }
 

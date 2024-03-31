@@ -1,8 +1,10 @@
 import React, { SetStateAction, useState } from "react";
 
+import { AxiosResponse } from "axios";
 import { api } from "@/service/api";
 
 import { ProductsDTO } from "@/dtos/Products.dto";
+import { ProductImage } from "@/@types";
 
 export interface ProductsContext {
   loading: boolean;
@@ -16,7 +18,11 @@ export interface ProductsContext {
   getProducts: () => Promise<void>;
   getProductDetails: (id: string) => Promise<void>;
   getUserProducts: () => Promise<void>;
-  postProducts: (product: ProductsDTO) => Promise<void>;
+  postProducts: (product: ProductsDTO) => Promise<AxiosResponse<any, any>>;
+  postProductImages: (
+    product_id: string,
+    images: Array<ProductImage>
+  ) => Promise<AxiosResponse<any, any>>;
   putProducts: (id: string) => Promise<void>;
   patchProducts: (id: string) => Promise<void>;
   deleteProducts: (id: string) => Promise<void>;
@@ -94,7 +100,40 @@ export function ProductsProvider({ children }: IProps) {
   async function postProducts(product: ProductsDTO) {
     try {
       setLoading(true);
-      await api.post("products", product);
+
+      console.log("Submiting Product announcement: ", product);
+
+      const response = await api.post("products", product);
+
+      return response;
+    } catch (error) {
+      console.error("postProducts FAILED: ", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+  async function postProductImages(
+    product_id: string,
+    images: Array<ProductImage>
+  ) {
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+
+      formData.append("product_id", product_id);
+      formData.append("images", images);
+
+      console.log("Submiting product images: ", formData);
+
+      const response = await api.post("products/images", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return response;
     } catch (error) {
       console.error("postProducts FAILED: ", error);
       throw error;
@@ -148,6 +187,7 @@ export function ProductsProvider({ children }: IProps) {
         getProductDetails,
         getUserProducts,
         postProducts,
+        postProductImages,
         putProducts,
         patchProducts,
         deleteProducts,
