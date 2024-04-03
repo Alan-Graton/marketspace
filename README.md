@@ -30,5 +30,5 @@ A tela será dividida em outras 3 telas:
 
 - [X] Desenvolvimento inicial das interfaces (layout, estilização)
 - [X] Desenvolvimento inicial das funcionalidades (navegação, utilidades)
+- [X] Finalização da dinâmica das telas com ações do usuário pós-integração com Backend
 - [ ] Integração com Backend
-- [ ] Finalização da dinâmica das telas com ações do usuário pós-integração com Backend
