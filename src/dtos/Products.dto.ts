@@ -1,8 +1,8 @@
 import { PaymentMethods, ProductImage } from "@/@types";
 
 export interface ProductsDTO {
-  id?: string;
-  images: Array<ProductImage>;
+  id: string;
+  product_images: Array<ProductImage>;
   name: string;
   description: string;
   is_new: boolean;

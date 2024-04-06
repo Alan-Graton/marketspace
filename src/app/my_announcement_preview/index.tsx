@@ -49,7 +49,7 @@ export default function MyAnnouncementPreview() {
       await postProductImages(
         data.id,
         user.name.trim(),
-        selectedProduct.images
+        selectedProduct.product_images
       );
 
       Toast.show({

@@ -20,10 +20,15 @@ import { ProductsDTO } from "@/dtos/Products.dto";
 import * as S from "./styles";
 
 export default function Home() {
-  const { products, setProducts, getProducts, setSelectedProduct } =
-    useProductsContext();
+  const {
+    products,
+    getProducts,
+    userProducts,
+    getUserProducts,
+    setSelectedProduct,
+  } = useProductsContext();
 
-  const USER_ACTIVE_PRODUCTS = products.filter(
+  const USER_ACTIVE_PRODUCTS = userProducts.filter(
     (product) => product.is_active
   ).length;
 
@@ -33,11 +38,12 @@ export default function Home() {
     React.useCallback(() => {
       async function fetchData() {
         await getProducts();
+        await getUserProducts();
       }
 
       setSelectedProduct({
         id: "",
-        images: [],
+        product_images: [],
         name: "",
         description: "",
         is_new: false,
@@ -45,7 +51,7 @@ export default function Home() {
         accept_trade: false,
         is_active: false,
         payment_methods: [],
-      } as ProductsDTO);
+      });
 
       fetchData();
     }, [])
@@ -71,8 +77,11 @@ export default function Home() {
                   <S.ProductCardContainer>
                     <AppProductCard
                       showAvatar
-                      status={item.is_new}
+                      item={item}
                       key={item.id}
+                      onPress={() =>
+                        setSelectedProduct((prevState) => (prevState = item))
+                      }
                     />
                   </S.ProductCardContainer>
                 )}

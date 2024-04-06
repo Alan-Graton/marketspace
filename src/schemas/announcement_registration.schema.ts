@@ -1,11 +1,11 @@
 import * as yup from "yup";
 
 const announcementRegistrationSchema = yup.object({
-  images: yup
+  product_images: yup
     .array()
     .of(
       yup.object({
-        name: yup.string(),
+        path: yup.string(),
         type: yup.string(),
         uri: yup.string(),
       })
@@ -32,7 +32,7 @@ const announcementRegistrationSchema = yup.object({
 });
 
 interface IAnnouncementRegistrationSchema {
-  images: Array<any>;
+  product_images: Array<any>;
   name: string;
   description: string;
   is_new: boolean;
@@ -42,7 +42,7 @@ interface IAnnouncementRegistrationSchema {
 }
 
 const DEFAULT_VALUES = {
-  images: [],
+  product_images: [],
   name: "",
   description: "",
   is_new: true,

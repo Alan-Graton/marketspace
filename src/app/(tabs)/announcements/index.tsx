@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { router, useFocusEffect } from "expo-router";
 import { FlatList, ScrollView, Text } from "react-native";
 
@@ -7,8 +7,13 @@ import { useProductsContext } from "@/hooks/useProductsContext.hook";
 import { AppDropDown } from "@/components/AppDropDown";
 import { AppProductCard } from "@/components/AppProductCard";
 import { AppEmptyList } from "@/components/AppEmptyList";
+import { AppRefreshControl } from "@/components/AppRefreshControl";
+
+import { AppError } from "@/utils/AppError.util";
 
 import { ProductsDTO } from "@/dtos/Products.dto";
+
+import Toast from "react-native-toast-message";
 
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
@@ -16,27 +21,64 @@ import * as S from "./styles";
 export default function Announcements() {
   const { COLORS, FONT_FAMILY } = useTheme();
 
-  const { userProducts, getUserProducts, selectedProduct, setSelectedProduct } =
-    useProductsContext();
+  const {
+    userProducts,
+    getUserProducts,
+    setSelectedProduct,
+    getProductDetails,
+  } = useProductsContext();
 
-  const [selectedFilter, setSelectedFilter] = React.useState<IProductsFilter>(
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [selectedFilter, setSelectedFilter] = useState<IProductsFilter>(
     PRODUCTS_FILTER[0]
   );
 
-  function handleOpenAnnouncementDetails(item: ProductsDTO) {
-    console.log("Selected Item: ", item);
+  const USER_PRODUCTS_QNT = userProducts.length;
 
-    setSelectedProduct(item);
+  async function fetchData() {
+    try {
+      setRefreshing(true);
 
-    router.push(`/announcement_details/${item.id}`);
+      await getUserProducts();
+    } catch (error) {
+      console.error("fetchData FAILED: ", error);
+
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível buscar seus anúncios. Tente novamente mais tarde.";
+
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: title,
+      });
+    } finally {
+      setRefreshing(false);
+    }
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      async function fetchData() {
-        await getUserProducts();
-      }
+  async function handleOpenAnnouncementDetails(item: ProductsDTO) {
+    try {
+      setSelectedProduct(item);
 
+      console.log("Pressed Item: ", item);
+
+      await getProductDetails(item.id);
+
+      // router.push(`/announcement_details/${item.id}`);
+    } catch (error) {
+      console.error("handleOpenAnnouncementDetails FAILED: ", error);
+    }
+  }
+
+  const handleOnRefresh = useCallback(() => {
+    fetchData();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
       fetchData();
     }, [])
   );
@@ -44,8 +86,12 @@ export default function Announcements() {
   return (
     <S.Container>
       <S.Content>
+        {/* TODO: Tentar passar <S.Header /> e seus filhos como "StickyHeaderCompoment" de <ScrollView /> */}
+        {/* Isso poderia ser minha solução para o app 'Coffee Delivery' */}
         <S.Header>
-          <Text style={{ fontFamily: FONT_FAMILY.BODY }}>9 anúncios</Text>
+          <Text style={{ fontFamily: FONT_FAMILY.BODY }}>
+            {USER_PRODUCTS_QNT} anúncios
+          </Text>
           <AppDropDown
             style={{
               borderWidth: 1,
@@ -62,7 +108,15 @@ export default function Announcements() {
             onChange={setSelectedFilter}
           />
         </S.Header>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <AppRefreshControl
+              refreshing={refreshing}
+              onRefresh={handleOnRefresh}
+            />
+          }
+        >
           <S.Body>
             <FlatList
               data={userProducts}
@@ -70,7 +124,7 @@ export default function Announcements() {
               renderItem={({ item }) => (
                 <S.ProductCardContainer>
                   <AppProductCard
-                    status={item.is_new}
+                    item={item}
                     key={item.id}
                     onPress={() => handleOpenAnnouncementDetails(item)}
                   />

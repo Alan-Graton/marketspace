@@ -54,10 +54,10 @@ export default function AnnouncementRegistration() {
       : DEFAULT_VALUES,
   });
 
-  const { images, payment_methods } = getValues();
+  const { product_images, payment_methods } = getValues();
 
   const handleImagesActions = useFieldArray({
-    name: "images",
+    name: "product_images",
     control,
   });
 
@@ -70,6 +70,7 @@ export default function AnnouncementRegistration() {
   const [productPrice, setProductPrice] = React.useState<number | null>(
     Number(
       selectedProduct.price
+        .toString()
         .replaceAll(",", "")
         .replaceAll(".", "")
         .replace("R$", "")
@@ -85,7 +86,7 @@ export default function AnnouncementRegistration() {
     });
 
     if (response.canceled) {
-      setValue("images", []);
+      setValue("product_images", []);
 
       return;
     }
@@ -105,7 +106,7 @@ export default function AnnouncementRegistration() {
       const fileExtension = selectedUri.uri.split(".").pop();
 
       const productImgFile = {
-        name: "", // Vai ser atualizado após enviar o resto dos dados do form
+        path: "", // Vai ser atualizado após enviar o resto dos dados do form
         uri: selectedUri.uri,
         type: `${selectedUri.type}/${fileExtension}`,
       };
@@ -133,13 +134,13 @@ export default function AnnouncementRegistration() {
 
     setLoading(true);
 
-    payload.images.forEach((image, index) => {
-      if (image.name) return;
+    payload.product_images.forEach((image, index) => {
+      if (image.path) return;
 
       // Realmente preciso fazer assim, alterar diretamente no form?
       handleImagesActions.update(index, {
         ...image,
-        name: payload["name"].trim(),
+        path: payload["name"].trim(),
       });
     });
 
@@ -161,11 +162,11 @@ export default function AnnouncementRegistration() {
           </View>
           <Controller
             control={control}
-            name="images"
+            name="product_images"
             render={({ field: {} }) => (
               <>
                 <View style={{ flexDirection: "row", gap: 8 }}>
-                  {images.map((image, index) => (
+                  {product_images.map((image, index) => (
                     <View key={image.uri}>
                       <S.ProductImage source={{ uri: image.uri }} />
                       <S.ProductImageRemover
@@ -175,13 +176,13 @@ export default function AnnouncementRegistration() {
                       </S.ProductImageRemover>
                     </View>
                   ))}
-                  {images.length < 3 && (
+                  {product_images.length < 3 && (
                     <S.ProductImageSelector onPress={onAddProductImages}>
                       <Plus size={24} color={COLORS.GRAY_400} />
                     </S.ProductImageSelector>
                   )}
                 </View>
-                <AppFormTexts errorMessage={errors.images?.message} />
+                <AppFormTexts errorMessage={errors.product_images?.message} />
               </>
             )}
           />

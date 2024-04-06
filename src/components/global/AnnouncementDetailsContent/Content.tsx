@@ -56,7 +56,7 @@ export function Content({ children, product }: Props) {
       <S.Content>
         <S.Header>
           <FlatList
-            data={product.images}
+            data={product.product_images}
             keyExtractor={(item) => item.uri}
             renderItem={({ item }) => (
               <S.AnnouncementImg source={{ uri: item.uri }} />
