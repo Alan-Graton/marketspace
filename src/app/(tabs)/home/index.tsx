@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
 
 import { FlatList, ScrollView } from "react-native";
@@ -8,6 +8,7 @@ import { useProductsContext } from "@/hooks/useProductsContext.hook";
 import { AppProductCard } from "@/components/AppProductCard";
 import { AppBottomSheet } from "@/components/AppBottomSheet";
 import { AppEmptyList } from "@/components/AppEmptyList";
+import { AppRefreshControl } from "@/components/AppRefreshControl";
 
 import { AnnouncementsCounter } from "./components/AnnouncementsCounter";
 import { ProductsFilter } from "./components/ProductsFilter";
@@ -15,7 +16,9 @@ import { BottomSheetHeader } from "./components/BottomSheetComponents/BottomShee
 import { BottomSheetBody } from "./components/BottomSheetComponents/BottomSheetBody";
 import { BottomSheetFooter } from "./components/BottomSheetComponents/BottomSheetFooter";
 
-import { ProductsDTO } from "@/dtos/Products.dto";
+import { AppError } from "@/utils/AppError.util";
+
+import Toast from "react-native-toast-message";
 
 import * as S from "./styles";
 
@@ -32,15 +35,40 @@ export default function Home() {
     (product) => product.is_active
   ).length;
 
-  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [bottomSheetVisible, setBottomSheetVisible] = useState<boolean>(false);
+
+  async function fetchData() {
+    try {
+      setRefreshing(true);
+
+      await getProducts();
+      await getUserProducts();
+    } catch (error) {
+      console.error("fetchData FAILED: ", error);
+
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível entrar. Tente novamente mais tarde.";
+
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: title,
+      });
+    } finally {
+      setRefreshing(false);
+    }
+  }
+
+  const handleOnRefresh = useCallback(() => {
+    fetchData();
+  }, []);
 
   useFocusEffect(
-    React.useCallback(() => {
-      async function fetchData() {
-        await getProducts();
-        await getUserProducts();
-      }
-
+    useCallback(() => {
       setSelectedProduct({
         id: "",
         product_images: [],
@@ -60,7 +88,15 @@ export default function Home() {
   return (
     <>
       <S.Container>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <AppRefreshControl
+              refreshing={refreshing}
+              onRefresh={handleOnRefresh}
+            />
+          }
+        >
           <S.Content>
             <S.Header>
               <AnnouncementsCounter counter={USER_ACTIVE_PRODUCTS} />
