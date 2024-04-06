@@ -10,7 +10,7 @@ export type ProductStatus = 0 | 1;
 export type PaymentMethods = "boleto" | "pix" | "cash" | "card" | "deposit";
 
 export interface ProductImage {
-  name: string;
+  path: string;
   type: string;
   uri: string;
 }
