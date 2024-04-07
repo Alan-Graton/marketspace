@@ -62,6 +62,12 @@ export default function MyAnnouncementDetails() {
       await api.delete(`products/${selectedProduct.id}`);
 
       router.replace("/announcements/");
+
+      Toast.show({
+        type: "success",
+        text1: "Êxito!",
+        text2: "Anúncio deletado com sucesso!",
+      });
     } catch (error) {
       console.error("handleProductStatusChange FAILED: ", error);
 
