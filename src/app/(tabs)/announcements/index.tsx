@@ -21,12 +21,8 @@ import * as S from "./styles";
 export default function Announcements() {
   const { COLORS, FONT_FAMILY } = useTheme();
 
-  const {
-    userProducts,
-    getUserProducts,
-    setSelectedProduct,
-    getProductDetails,
-  } = useProductsContext();
+  const { userProducts, getUserProducts, setSelectedProduct } =
+    useProductsContext();
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = useState<IProductsFilter>(
@@ -60,17 +56,8 @@ export default function Announcements() {
   }
 
   async function handleOpenAnnouncementDetails(item: ProductsDTO) {
-    try {
-      setSelectedProduct(item);
-
-      console.log("Pressed Item: ", item);
-
-      await getProductDetails(item.id);
-
-      // router.push(`/announcement_details/${item.id}`);
-    } catch (error) {
-      console.error("handleOpenAnnouncementDetails FAILED: ", error);
-    }
+    setSelectedProduct((prevState) => (prevState = item));
+    router.push("/my_announcement_details/");
   }
 
   const handleOnRefresh = useCallback(() => {

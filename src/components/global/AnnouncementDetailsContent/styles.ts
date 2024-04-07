@@ -31,7 +31,7 @@ export const NextItemIndicator = styled.View`
   background-color: ${({ theme }) => theme.COLORS.GRAY_400};
 `;
 
-export const AnnouncementImg = styled.Image.attrs(({}) => ({
+export const AnnouncementImg = styled.ImageBackground.attrs(({}) => ({
   resizeMode: "stretch",
 }))`
   width: 375px;
@@ -40,6 +40,22 @@ export const AnnouncementImg = styled.Image.attrs(({}) => ({
 
 export const Body = styled.View`
   padding: 16px;
+`;
+
+export const ImgOverlayContainer = styled.View`
+  flex: 1;
+  background-color: #1a181bc9;
+
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ImgOverlayTitle = styled.Text`
+  ${({ theme }) => css`
+    color: ${theme.COLORS.GRAY_700};
+    font-size: ${theme.FONT_SIZE.sm}px;
+    font-family: ${theme.FONT_FAMILY.BODY};
+  `}
 `;
 
 export const AuthorSection = styled.View`

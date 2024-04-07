@@ -26,7 +26,13 @@ const announcementRegistrationSchema = yup.object({
     .nonNullable(),
   payment_methods: yup
     .array()
-    .of(yup.string().required())
+    .of(
+      yup.object({
+        key: yup.string(),
+        name: yup.string(),
+      })
+    )
+    // .of(yup.string().required())
     .min(1, "É obrigatório selecionar ao menos um Método de Pagamento")
     .required("Método de Pagamento é obrigatório"),
 });

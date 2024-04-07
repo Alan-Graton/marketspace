@@ -116,15 +116,29 @@ export default function AnnouncementRegistration() {
   }
 
   function onPressPaymentMethods(paymentMethodKey: PaymentMethods) {
-    const includesPaymentMethods = payment_methods.includes(paymentMethodKey);
+    const handlePaymentMethods = {
+      boleto: { key: paymentMethodKey, name: "Boleto" },
+      pix: { key: paymentMethodKey, name: "Pix" },
+      cash: { key: paymentMethodKey, name: "Dinheiro" },
+      deposit: { key: paymentMethodKey, name: "Depósito Bancário" },
+      card: { key: paymentMethodKey, name: "Cartão" },
+    };
+
+    const includesPaymentMethods = payment_methods.find(
+      (el) => el.key === paymentMethodKey
+    );
 
     if (!includesPaymentMethods) {
-      handlePaymentMethodsActions.append(paymentMethodKey);
+      handlePaymentMethodsActions.append(
+        handlePaymentMethods[paymentMethodKey]
+      );
 
       return;
     }
 
-    const removeWithIndex = payment_methods.indexOf(paymentMethodKey);
+    const removeWithIndex = payment_methods.findIndex(
+      (el) => el.key === paymentMethodKey
+    );
 
     handlePaymentMethodsActions.remove(removeWithIndex);
   }
@@ -146,6 +160,8 @@ export default function AnnouncementRegistration() {
 
     setSelectedProduct((prevState) => (prevState = payload));
     setLoading(false);
+
+    // Exibir dados através de params da rota ao invés de usar o "selectedProduct"
     router.push("/my_announcement_preview/");
   }
 
@@ -308,31 +324,43 @@ export default function AnnouncementRegistration() {
                         <S.PaymentMethodsCheckBox
                           title="Boleto"
                           key="boleto"
-                          checked={value?.includes("boleto")}
+                          checked={
+                            value?.find((el) => el.key === "boleto") !==
+                            undefined
+                          }
                           onPress={() => onPressPaymentMethods("boleto")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Pix"
                           key="pix"
-                          checked={value?.includes("pix")}
+                          checked={
+                            value?.find((el) => el.key === "pix") !== undefined
+                          }
                           onPress={() => onPressPaymentMethods("pix")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Dinheiro"
                           key="cash"
-                          checked={value?.includes("cash")}
+                          checked={
+                            value?.find((el) => el.key === "cash") !== undefined
+                          }
                           onPress={() => onPressPaymentMethods("cash")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Cartão de Crédito"
                           key="card"
-                          checked={value?.includes("card")}
+                          checked={
+                            value?.find((el) => el.key === "card") !== undefined
+                          }
                           onPress={() => onPressPaymentMethods("card")}
                         />
                         <S.PaymentMethodsCheckBox
                           title="Depósito Bancário"
                           key="deposit"
-                          checked={value?.includes("deposit")}
+                          checked={
+                            value?.find((el) => el.key === "deposit") !==
+                            undefined
+                          }
                           onPress={() => onPressPaymentMethods("deposit")}
                         />
 

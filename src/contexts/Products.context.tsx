@@ -16,6 +16,7 @@ export interface ProductsContext {
   selectedProduct: ProductsDTO;
   setSelectedProduct: React.Dispatch<SetStateAction<ProductsDTO>>;
   getProducts: () => Promise<void>;
+  getProductsImages: (path: string) => Promise<any>;
   getProductDetails: (id: string) => Promise<void>;
   getUserProducts: () => Promise<void>;
   postProducts: (product: ProductsDTO) => Promise<AxiosResponse<any, any>>;
@@ -42,7 +43,7 @@ export function ProductsProvider({ children }: IProps) {
   const [userProducts, setUserProducts] = useState<Array<ProductsDTO>>([]);
   const [selectedProduct, setSelectedProduct] = useState<ProductsDTO>({
     id: "",
-    images: [],
+    product_images: [],
     name: "",
     description: "",
     is_new: false,
@@ -57,8 +58,6 @@ export function ProductsProvider({ children }: IProps) {
       setLoading(true);
       const { data } = await api.get("products");
 
-      console.log("getProducts RESPONSE: ", data);
-
       setProducts((prevState) => (prevState = data));
     } catch (error) {
       console.error("getProducts FAILED: ", error);
@@ -67,9 +66,26 @@ export function ProductsProvider({ children }: IProps) {
       setLoading(false);
     }
   }
+  async function getProductsImages(path: string) {
+    try {
+      setLoading(true);
+      const { data } = await api.get(`images/${path}`);
+
+      return data;
+    } catch (error) {
+      console.error("getProductsImages FAILED: ", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
   async function getProductDetails(id: string) {
     try {
       setLoading(true);
+
+      const { data } = await api.get(`products/${id}`);
+
+      setSelectedProduct((prevState) => (prevState = data));
     } catch (error) {
       console.error("getProductDetails FAILED: ", error);
       throw error;
@@ -81,8 +97,6 @@ export function ProductsProvider({ children }: IProps) {
     try {
       setLoading(true);
       const { data } = await api.get("users/products");
-
-      console.log("getUserProducts RESPONSE: ", data);
 
       setUserProducts((prevState) => (prevState = data));
     } catch (error) {
@@ -120,7 +134,7 @@ export function ProductsProvider({ children }: IProps) {
       images.forEach((img) => {
         formData.append("images", {
           ...img,
-          name: `${username}.${img.name}`.toLocaleLowerCase(),
+          name: `${username}.${img.path}`.toLocaleLowerCase(),
         });
       });
 
@@ -151,6 +165,10 @@ export function ProductsProvider({ children }: IProps) {
   async function patchProducts(id: string) {
     try {
       setLoading(true);
+
+      await api.patch(`products/${id}`, {
+        is_active: false,
+      });
     } catch (error) {
       console.error("patchProducts FAILED: ", error);
       throw error;
@@ -181,6 +199,7 @@ export function ProductsProvider({ children }: IProps) {
         selectedProduct,
         setSelectedProduct,
         getProducts,
+        getProductsImages,
         getProductDetails,
         getUserProducts,
         postProducts,

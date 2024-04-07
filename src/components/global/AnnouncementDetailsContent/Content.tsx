@@ -8,6 +8,8 @@ import { AppStatusBadge } from "@/components/AppStatusBadge";
 
 import { handleUserAvatar } from "@/utils/handleUserAvatar.util";
 
+import { api } from "@/service/api";
+
 import { PaymentMethods } from "@/@types";
 import { ProductsDTO } from "@/dtos/Products.dto";
 
@@ -43,6 +45,7 @@ export function Content({ children, product }: Props) {
 
   function handlePaymentMethodIcon(paymentMethod: PaymentMethods) {
     const { Icon, title } = paymentMethodIcons[paymentMethod];
+
     return (
       <>
         <Icon size={18} color={COLORS.GRAY_100} />
@@ -57,9 +60,21 @@ export function Content({ children, product }: Props) {
         <S.Header>
           <FlatList
             data={product.product_images}
-            keyExtractor={(item) => item.uri}
+            keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <S.AnnouncementImg source={{ uri: item.uri }} />
+              <>
+                <S.AnnouncementImg
+                  source={{
+                    uri: `${api.defaults.baseURL}/images/${item.path}`,
+                  }}
+                >
+                  {!product.is_active && (
+                    <S.ImgOverlayContainer>
+                      <S.ImgOverlayTitle>ANÚNCIO DESATIVADO</S.ImgOverlayTitle>
+                    </S.ImgOverlayContainer>
+                  )}
+                </S.AnnouncementImg>
+              </>
             )}
             showsHorizontalScrollIndicator={false}
             horizontal
@@ -90,7 +105,11 @@ export function Content({ children, product }: Props) {
                 <View style={{ flexDirection: "row", alignItems: "baseline" }}>
                   <S.DollarSign>R$</S.DollarSign>
                   <S.ProductPrice>
-                    {String(product.price).split("R$")[1]}
+                    {new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      signDisplay: "never",
+                    }).format(Number(product.price))}
                   </S.ProductPrice>
                 </View>
               </S.ProductPriceNameWrapper>
@@ -109,8 +128,8 @@ export function Content({ children, product }: Props) {
             Meio de pagamento:
           </S.PaymentMethodSectionTitle>
           {product.payment_methods.map((paymentMethod) => (
-            <S.PaymentMethodOption key={paymentMethod}>
-              {handlePaymentMethodIcon(paymentMethod)}
+            <S.PaymentMethodOption key={paymentMethod.key}>
+              {handlePaymentMethodIcon(paymentMethod.key)}
             </S.PaymentMethodOption>
           ))}
         </S.Body>

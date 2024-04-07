@@ -8,6 +8,6 @@ export interface ProductsDTO {
   is_new: boolean;
   price: string | number;
   accept_trade: boolean;
-  is_active?: boolean;
-  payment_methods: Array<PaymentMethods>;
+  is_active: boolean;
+  payment_methods: Array<{ key: PaymentMethods; name: string }>;
 }
