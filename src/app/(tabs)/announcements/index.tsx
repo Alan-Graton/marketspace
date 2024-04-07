@@ -67,6 +67,18 @@ export default function Announcements() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
+
+      setSelectedProduct({
+        id: "",
+        product_images: [],
+        name: "",
+        description: "",
+        is_new: false,
+        price: "R$00,00",
+        accept_trade: false,
+        is_active: false,
+        payment_methods: [],
+      });
     }, [])
   );
 

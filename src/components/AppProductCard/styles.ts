@@ -1,5 +1,9 @@
 import styled, { css } from "styled-components/native";
 
+interface ProductVisibilityStatus {
+  is_active: boolean;
+}
+
 interface BadgeStyleProps {
   status: boolean;
 }
@@ -27,6 +31,31 @@ export const ProductImg = styled.ImageBackground`
   border-radius: 6px;
 
   overflow: hidden;
+`;
+
+export const OverlayContainer = styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-color: #1a181ba1;
+
+  align-items: flex-start;
+`;
+
+export const OverlayTitle = styled.Text`
+  position: absolute;
+
+  bottom: 5px;
+  left: 10px;
+
+  ${({ theme }) => css`
+    color: ${theme.COLORS.GRAY_700};
+    font-size: 11px;
+    font-family: ${theme.FONT_FAMILY.HEADING};
+  `};
 `;
 
 export const Header = styled.View`
@@ -73,20 +102,20 @@ export const Footer = styled.View`
   padding: 5px;
 `;
 
-export const Product = styled.Text`
-  ${({ theme }) => css`
+export const Product = styled.Text<ProductVisibilityStatus>`
+  ${({ theme, is_active }) => css`
     font-size: ${theme.FONT_SIZE.sm}px;
     font-family: ${theme.FONT_FAMILY.BODY};
 
-    color: ${theme.COLORS.GRAY_200};
+    color: ${is_active ? theme.COLORS.GRAY_200 : theme.COLORS.GRAY_400};
   `}
 `;
 
-export const Price = styled.Text`
-  ${({ theme }) => css`
+export const Price = styled.Text<ProductVisibilityStatus>`
+  ${({ theme, is_active }) => css`
     font-size: ${theme.FONT_SIZE.md}px;
     font-family: ${theme.FONT_FAMILY.HEADING};
 
-    color: ${theme.COLORS.GRAY_100};
+    color: ${is_active ? theme.COLORS.GRAY_100 : theme.COLORS.GRAY_400};
   `}
 `;

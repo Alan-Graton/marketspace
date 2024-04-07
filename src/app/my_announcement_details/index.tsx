@@ -43,7 +43,33 @@ export default function MyAnnouncementDetails() {
 
       const title = isAppError
         ? error.message
-        : "Não foi possível entrar. Tente novamente mais tarde.";
+        : "Não foi possível desabilitar o anúncio. Tente novamente mais tarde.";
+
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: title,
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleProductDeletion() {
+    try {
+      setLoading(true);
+
+      await api.delete(`products/${selectedProduct.id}`);
+
+      router.replace("/announcements/");
+    } catch (error) {
+      console.error("handleProductStatusChange FAILED: ", error);
+
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível deletar o anúncio. Tente novamente mais tarde.";
 
       Toast.show({
         type: "error",
@@ -70,12 +96,14 @@ export default function MyAnnouncementDetails() {
                 type={selectedProduct.is_active ? "primary" : "ternary"}
                 icon={<Power size={18} color={COLORS.GRAY_700} />}
                 loading={loading}
-                onPress={() => handleProductStatusChange()}
+                onPress={handleProductStatusChange}
               />
               <AppButton
                 title="Excluir anúncio"
                 type="secondary"
                 icon={<TrashSimple size={18} color={COLORS.GRAY_200} />}
+                loading={loading}
+                onPress={handleProductDeletion}
               />
             </S.Footer>
           </AnnouncementDetailsRoot.Content>

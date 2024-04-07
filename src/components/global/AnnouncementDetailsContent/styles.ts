@@ -44,7 +44,7 @@ export const Body = styled.View`
 
 export const ImgOverlayContainer = styled.View`
   flex: 1;
-  background-color: #1a181bc9;
+  background-color: #1a181ba1;
 
   align-items: center;
   justify-content: center;

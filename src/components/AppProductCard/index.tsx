@@ -30,10 +30,15 @@ export function AppProductCard({ showAvatar = false, item, ...rest }: IProps) {
           {showAvatar && <S.Avatar source={avatar} />}
           <AppStatusBadge status={item.is_new} />
         </S.Header>
+        {!item.is_active && (
+          <S.OverlayContainer>
+            <S.OverlayTitle>ANÚNCIO DESATIVADO</S.OverlayTitle>
+          </S.OverlayContainer>
+        )}
       </S.ProductImg>
       <S.Footer>
-        <S.Product>{item.name}</S.Product>
-        <S.Price>
+        <S.Product is_active={item.is_active}>{item.name}</S.Product>
+        <S.Price is_active={item.is_active}>
           {new Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
