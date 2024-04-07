@@ -8,9 +8,10 @@ import { useAuthContext } from "@/hooks/useAuthContext.hook";
 import { House, Tag, SignOut } from "phosphor-react-native";
 
 import { THEME } from "@/theme";
+import { useProductsContext } from "@/hooks/useProductsContext.hook";
 
 export default function TabsLayout() {
-  const { selectedAnnouncement } = useAnnouncementContext();
+  const { selectedProduct } = useProductsContext();
   const { signOut } = useAuthContext();
 
   async function handleSignOut() {
@@ -33,7 +34,7 @@ export default function TabsLayout() {
           backgroundColor: THEME.COLORS.GRAY_700,
           elevation: 0,
           borderColor: THEME.COLORS.GRAY_700,
-          display: selectedAnnouncement ? "none" : "flex",
+          display: selectedProduct.id ? "none" : "flex",
         },
         headerStyle: {
           backgroundColor: THEME.COLORS.GRAY_600,

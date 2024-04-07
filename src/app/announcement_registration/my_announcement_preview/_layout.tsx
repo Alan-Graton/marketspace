@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 
 import { StatusBar } from "expo-status-bar";
 
@@ -8,11 +8,12 @@ import { Header } from "./Header";
 export default function MyAnnouncementPreviewLayout() {
   return (
     <>
-      <Stack
-        screenOptions={{
+      <Stack.Screen
+        options={{
           header: () => <Header />,
         }}
       />
+      <Slot />
       <StatusBar animated style="light" />
     </>
   );

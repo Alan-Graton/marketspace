@@ -57,7 +57,7 @@ export default function Announcements() {
 
   async function handleOpenAnnouncementDetails(item: ProductsDTO) {
     setSelectedProduct((prevState) => (prevState = item));
-    router.push("/my_announcement_details/");
+    router.push("/announcements/my_announcement_details/");
   }
 
   const handleOnRefresh = useCallback(() => {

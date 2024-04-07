@@ -162,7 +162,7 @@ export default function AnnouncementRegistration() {
 
     // Exibir dados através de params da rota ao invés de usar o "selectedProduct"
     // TODO: Usar URL params para indicar qual ação executar ao pressionar em 'Publicar'
-    router.push("/my_announcement_preview/");
+    router.push("/announcement_registration/my_announcement_preview/");
   }
 
   return (
@@ -387,7 +387,7 @@ export default function AnnouncementRegistration() {
           title="Cancelar"
           style={{ flex: 1 }}
           type="secondary"
-          onPress={handleGoBack}
+          onPress={() => router.replace("/home/")}
         />
         <AppButton
           title="Avançar"

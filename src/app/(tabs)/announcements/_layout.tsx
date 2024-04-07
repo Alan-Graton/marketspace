@@ -9,17 +9,18 @@ import { AppIconButton } from "@/components/AppIconButton";
 import { Plus } from "phosphor-react-native";
 
 import { useTheme } from "styled-components/native";
+import { useProductsContext } from "@/hooks/useProductsContext.hook";
 
 export default function AnnouncementsLayout() {
   const { COLORS, FONT_FAMILY } = useTheme();
 
-  const { selectedAnnouncement } = useAnnouncementContext();
+  const { selectedProduct } = useProductsContext();
 
   return (
     <>
       <Tabs.Screen
         options={{
-          headerShown: !selectedAnnouncement ? true : false,
+          headerShown: !selectedProduct.id ? true : false,
           title: "Meus anúncios",
           headerTitleAlign: "center",
           tabBarShowLabel: false,
@@ -30,7 +31,6 @@ export default function AnnouncementsLayout() {
             height: 100,
             backgroundColor: COLORS.GRAY_600,
           },
-          // TODO: Title and buttons must be dynamic for diff ocasions
           headerRight: () => (
             <AppIconButton
               style={{ padding: 10 }}
