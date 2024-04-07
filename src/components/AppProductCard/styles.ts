@@ -40,7 +40,7 @@ export const OverlayContainer = styled.View`
   left: 0;
   right: 0;
 
-  background-color: #1a181ba1;
+  background-color: ${({ theme }) => theme.COLORS.IMAGE_OVERLAY};
 
   align-items: flex-start;
 `;

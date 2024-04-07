@@ -15,6 +15,8 @@ export const THEME = {
     GRAY_700: "#F7F7F8",
 
     BACKDROP: "#00000099",
+
+    IMAGE_OVERLAY: "#1a181ba1",
   },
   FONT_SIZE: {
     xls: 12,

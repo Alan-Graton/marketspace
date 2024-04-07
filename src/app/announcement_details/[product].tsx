@@ -4,16 +4,18 @@ import { ScrollView } from "react-native";
 
 import { useGlobalSearchParams } from "expo-router";
 
+import { ProductsDTO } from "@/dtos/Products.dto";
+
 import { AppButton } from "@/components/AppButton";
+import { AnnouncementDetailsRoot } from "@/components/global/AnnouncementDetailsContent/Root";
 
 import { WhatsappLogo } from "phosphor-react-native";
 
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
-import { AnnouncementDetailsRoot } from "@/components/global/AnnouncementDetailsContent/Root";
 
 export default function AnnouncementDetails() {
-  const { id } = useGlobalSearchParams<{ id: string }>();
+  const { product } = useGlobalSearchParams<{ product: any }>();
 
   const { COLORS } = useTheme();
 
@@ -21,7 +23,7 @@ export default function AnnouncementDetails() {
     <>
       <S.Container>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <AnnouncementDetailsRoot.Content />
+          <AnnouncementDetailsRoot.Content product={product as ProductsDTO} />
         </ScrollView>
         <AnnouncementDetailsRoot.Footer>
           <S.Footer>
