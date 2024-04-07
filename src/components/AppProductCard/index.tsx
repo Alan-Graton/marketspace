@@ -1,6 +1,6 @@
 import { TouchableOpacityProps } from "react-native";
 
-import { useProductsContext } from "@/hooks/useProductsContext.hook";
+import { formatNumber } from "react-native-currency-input";
 
 import { AppStatusBadge } from "../AppStatusBadge";
 
@@ -17,8 +17,6 @@ interface IProps extends TouchableOpacityProps {
 }
 
 export function AppProductCard({ showAvatar = false, item, ...rest }: IProps) {
-  const {} = useProductsContext();
-
   return (
     <S.Card {...rest}>
       <S.ProductImg
@@ -39,10 +37,7 @@ export function AppProductCard({ showAvatar = false, item, ...rest }: IProps) {
       <S.Footer>
         <S.Product is_active={item.is_active}>{item.name}</S.Product>
         <S.Price is_active={item.is_active}>
-          {new Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          }).format(Number(item.price))}
+          R${Number(item.price) / 100.0}
         </S.Price>
       </S.Footer>
     </S.Card>

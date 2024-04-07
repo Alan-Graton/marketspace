@@ -10,7 +10,7 @@ import { handleUserAvatar } from "@/utils/handleUserAvatar.util";
 
 import { api } from "@/service/api";
 
-import { PaymentMethods } from "@/@types";
+import { PaymentMethods, ProductImage } from "@/@types";
 import { ProductsDTO } from "@/dtos/Products.dto";
 
 import {
@@ -45,6 +45,14 @@ export function Content({ children, product }: Props) {
     deposit: { Icon: Bank, title: "Depósito Bancário" },
   };
 
+  function handleShowProductImg(item: ProductImage) {
+    if (item.uri) {
+      return item.uri;
+    }
+
+    return `${api.defaults.baseURL}/images/${item.path}`;
+  }
+
   function handlePaymentMethodIcon(paymentMethod: PaymentMethods) {
     const { Icon, title } = paymentMethodIcons[paymentMethod];
 
@@ -62,12 +70,12 @@ export function Content({ children, product }: Props) {
         <S.Header>
           <FlatList
             data={product.product_images}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id || item.uri}
             renderItem={({ item }) => (
               <>
                 <S.AnnouncementImg
                   source={{
-                    uri: `${api.defaults.baseURL}/images/${item.path}`,
+                    uri: handleShowProductImg(item),
                   }}
                 >
                   {!product.is_active && (

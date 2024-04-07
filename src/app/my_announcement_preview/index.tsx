@@ -38,17 +38,16 @@ export default function MyAnnouncementPreview() {
       const { data } = await postProducts({
         ...selectedProduct,
         price: Number(
-          selectedProduct.price
-            .toString()
-            .replace("R$", "")
-            .replaceAll(",", "")
+          String(selectedProduct.price)
+            .split(" ")[1]
             .replaceAll(".", "")
+            .replaceAll(",", "")
         ),
       });
 
       await postProductImages(
         data.id,
-        user.name.trim(),
+        user.name,
         selectedProduct.product_images
       );
 

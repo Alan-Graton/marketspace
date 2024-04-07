@@ -110,7 +110,10 @@ export function ProductsProvider({ children }: IProps) {
     try {
       setLoading(true);
 
-      const response = await api.post("products", product);
+      const response = await api.post("products", {
+        ...product,
+        payment_methods: product.payment_methods.map((el) => el.key),
+      });
 
       return response;
     } catch (error) {
@@ -134,7 +137,7 @@ export function ProductsProvider({ children }: IProps) {
       images.forEach((img) => {
         formData.append("images", {
           ...img,
-          name: `${username}.${img.path}`.toLocaleLowerCase(),
+          name: `${username.trim()}.${img.path.trim()}`.toLocaleLowerCase(),
         });
       });
 
