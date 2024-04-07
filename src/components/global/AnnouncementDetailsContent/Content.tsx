@@ -35,6 +35,8 @@ export function Content({ children, product }: Props) {
 
   const { user } = useAuthContext();
 
+  const [currency, value] = String(product.price).split(" ");
+
   const paymentMethodIcons = {
     boleto: { Icon: Barcode, title: "Boleto" },
     pix: { Icon: QrCode, title: "Pix" },
@@ -104,13 +106,7 @@ export function Content({ children, product }: Props) {
                 <S.ProductName>{product.name}</S.ProductName>
                 <View style={{ flexDirection: "row", alignItems: "baseline" }}>
                   <S.DollarSign>R$</S.DollarSign>
-                  <S.ProductPrice>
-                    {new Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                      signDisplay: "never",
-                    }).format(Number(product.price))}
-                  </S.ProductPrice>
+                  <S.ProductPrice>{value}</S.ProductPrice>
                 </View>
               </S.ProductPriceNameWrapper>
               <Text style={{ color: COLORS.GRAY_200 }}>

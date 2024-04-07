@@ -24,6 +24,7 @@ import {
   announcementRegistrationSchema,
 } from "@/schemas/announcement_registration.schema";
 
+import { api } from "@/service/api";
 // Seria melhor usar a DTO como tipagem para o todo esse schema
 import { ProductsDTO } from "@/dtos/Products.dto";
 
@@ -69,12 +70,11 @@ export default function AnnouncementRegistration() {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [productPrice, setProductPrice] = React.useState<number | null>(
     Number(
-      selectedProduct.price
-        .toString()
-        .replaceAll(",", "")
-        .replaceAll(".", "")
-        .replace("R$", "")
-    )
+      String(selectedProduct.price)
+        ?.split(" ")[1]
+        ?.replaceAll(".", "")
+        ?.replaceAll(",", ".")
+    ) || null
   );
 
   async function onAddProductImages() {
@@ -151,7 +151,6 @@ export default function AnnouncementRegistration() {
     payload.product_images.forEach((image, index) => {
       if (image.path) return;
 
-      // Realmente preciso fazer assim, alterar diretamente no form?
       handleImagesActions.update(index, {
         ...image,
         path: payload["name"].trim(),
@@ -162,6 +161,7 @@ export default function AnnouncementRegistration() {
     setLoading(false);
 
     // Exibir dados através de params da rota ao invés de usar o "selectedProduct"
+    // TODO: Usar URL params para indicar qual ação executar ao pressionar em 'Publicar'
     router.push("/my_announcement_preview/");
   }
 
@@ -183,8 +183,14 @@ export default function AnnouncementRegistration() {
               <>
                 <View style={{ flexDirection: "row", gap: 8 }}>
                   {product_images.map((image, index) => (
-                    <View key={image.uri}>
-                      <S.ProductImage source={{ uri: image.uri }} />
+                    <View key={image.uri || image.id}>
+                      <S.ProductImage
+                        source={{
+                          uri:
+                            image.uri ||
+                            `${api.defaults.baseURL}/images/${image.path}`,
+                        }}
+                      />
                       <S.ProductImageRemover
                         onPress={() => handleImagesActions.remove(index)}
                       >

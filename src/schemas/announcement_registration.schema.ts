@@ -19,6 +19,7 @@ const announcementRegistrationSchema = yup.object({
     .boolean()
     .required("Estado do Produto é obrigatório")
     .nonNullable(),
+  is_active: yup.boolean().default(true),
   price: yup.string().required("Preço do Produto é obrigatório"),
   accept_trade: yup
     .boolean()
@@ -32,7 +33,6 @@ const announcementRegistrationSchema = yup.object({
         name: yup.string(),
       })
     )
-    // .of(yup.string().required())
     .min(1, "É obrigatório selecionar ao menos um Método de Pagamento")
     .required("Método de Pagamento é obrigatório"),
 });
@@ -42,6 +42,7 @@ interface IAnnouncementRegistrationSchema {
   name: string;
   description: string;
   is_new: boolean;
+  is_active: boolean;
   price: string;
   accept_trade: boolean;
   payment_methods: Array<any>;
@@ -52,7 +53,8 @@ const DEFAULT_VALUES = {
   name: "",
   description: "",
   is_new: true,
-  price: "R$00,00",
+  is_active: true,
+  price: "R$0,00",
   accept_trade: false,
   payment_methods: [],
 };

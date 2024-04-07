@@ -135,10 +135,9 @@ export const SaleSection = styled.View`
 
 export const ProductPrice = styled(CurrencyInput).attrs(({ theme }) => ({
   minValue: 0,
-  prefix: "R$",
+  prefix: "R$ ",
   delimiter: ".",
   separator: ",",
-  precision: 2,
 }))``;
 
 export const Footer = styled.View`
