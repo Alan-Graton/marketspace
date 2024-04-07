@@ -37,7 +37,12 @@ export function AppProductCard({ showAvatar = false, item, ...rest }: IProps) {
       <S.Footer>
         <S.Product is_active={item.is_active}>{item.name}</S.Product>
         <S.Price is_active={item.is_active}>
-          R${Number(item.price) / 100.0}
+          R$
+          {formatNumber(Number(item.price) / 100.0, {
+            delimiter: ".",
+            separator: ",",
+            precision: 2,
+          })}
         </S.Price>
       </S.Footer>
     </S.Card>

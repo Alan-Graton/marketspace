@@ -24,6 +24,7 @@ import {
 
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
+import { formatNumber } from "react-native-currency-input";
 
 interface Props {
   children?: React.JSX.Element;
@@ -36,6 +37,8 @@ export function Content({ children, product }: Props) {
   const { user } = useAuthContext();
 
   const [currency, value] = String(product.price).split(" ");
+
+  console.log({ value, price: product.price });
 
   const paymentMethodIcons = {
     boleto: { Icon: Barcode, title: "Boleto" },
@@ -114,7 +117,14 @@ export function Content({ children, product }: Props) {
                 <S.ProductName>{product.name}</S.ProductName>
                 <View style={{ flexDirection: "row", alignItems: "baseline" }}>
                   <S.DollarSign>R$</S.DollarSign>
-                  <S.ProductPrice>{value}</S.ProductPrice>
+                  <S.ProductPrice>
+                    {value ||
+                      formatNumber(Number(product.price) / 100.0, {
+                        delimiter: ".",
+                        separator: ",",
+                        precision: 2,
+                      })}
+                  </S.ProductPrice>
                 </View>
               </S.ProductPriceNameWrapper>
               <Text style={{ color: COLORS.GRAY_200 }}>
